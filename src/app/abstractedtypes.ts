@@ -1,7 +1,10 @@
 // Stores entity types that are safe to be shown to the web
 import { User } from ".prisma/client";
 
-export type AbstractUser = Omit<User, "email" | "password">;
+export type AbstractUser = Omit<
+    User,
+    "email" | "password" | "address1" | "address2" | "city" | "postcode"
+>;
 
 export function sanitise(user: User[]): AbstractUser[];
 export function sanitise(user: User): AbstractUser;
