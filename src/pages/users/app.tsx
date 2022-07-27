@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 import { GetServerSideProps } from "next";
-import { JWT } from "../../app/jwt";
+import { JWT } from "../../app/userjwt";
 import { DefaultProps } from "../../app/okra";
 import { Navbar } from "../../components/Navbar";
 import { prisma } from "../../app/prisma";

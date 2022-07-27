@@ -7,8 +7,8 @@ import {
 import { prisma } from "../../../app/prisma";
 import { loginSchema } from "../../../schemas/userschema";
 import argon2 from "argon2";
-import { UserJWT } from "../../../app/userjwt";
-import { sanitiseUser } from "../../../app/abstractedtypes";
+import { JWT } from "../../../app/userjwt";
+import { sanitise } from "../../../app/abstractedtypes";
 
 export default createEndpoint({
     POST: async (req, res) => {
@@ -26,10 +26,10 @@ export default createEndpoint({
         if (!(await argon2.verify(user.password as string, password)))
             throw new AuthorizationError("user");
 
-        const jwt = new UserJWT(sanitiseUser(user));
+        const jwt = new JWT(sanitise(user));
         const token = jwt.sign();
 
-        res.setHeader("Set-Cookie", UserJWT.cookie(token));
+        res.setHeader("Set-Cookie", JWT.cookie(token));
 
         res.json({ token });
     },

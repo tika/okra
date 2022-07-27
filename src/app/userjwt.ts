@@ -4,11 +4,10 @@ import * as jwt from "jsonwebtoken";
 import dayjs from "dayjs";
 import { IncomingMessage } from "http";
 import { AbstractUser } from "./abstractedtypes";
-import { NextApiRequest } from "next";
 
 export type JWTPayload = Pick<User, "id">;
 
-export class JWT {
+export class UserJWT {
     public static readonly SECRET_KEY = process.env.JWT_SECRET_KEY as string;
     public readonly user;
 
@@ -21,17 +20,17 @@ export class JWT {
             id: this.user.id,
         };
 
-        return jwt.sign(payload, JWT.SECRET_KEY, {
+        return jwt.sign(payload, UserJWT.SECRET_KEY, {
             expiresIn: "24h",
         });
     }
 
     public static logoutCookie() {
-        return JWT.cookie("", new Date());
+        return UserJWT.cookie("", new Date());
     }
 
     public static cookie(token: string, expiry?: Date): string {
-        return serialize("token", token, {
+        return serialize("user-token", token, {
             httpOnly: true,
             expires: expiry || dayjs().add(24, "hours").toDate(),
             secure: process.env.NODE_ENV === "production",
@@ -56,7 +55,7 @@ export class JWT {
             return null;
         }
 
-        return JWT.verify(token);
+        return UserJWT.verify(token);
     }
 
     public static verify(token?: string): JWTPayload | null {
@@ -65,7 +64,7 @@ export class JWT {
         try {
             const { ...payload } = jwt.verify(
                 token,
-                JWT.SECRET_KEY
+                UserJWT.SECRET_KEY
             ) as JWTPayload;
             return payload;
         } catch (_) {

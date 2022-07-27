@@ -7,7 +7,7 @@ import { Navbar } from "../../components/Navbar";
 import { FormInput } from "../../components/FormInput";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
-import { JWT } from "../../app/jwt";
+import { JWT } from "../../app/userjwt";
 
 interface Props {}
 

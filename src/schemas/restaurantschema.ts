@@ -4,9 +4,12 @@ const name = z.string().min(3);
 const password = z.string().min(6);
 
 export const registerSchema = z.object({
+    logo: z.string().optional(),
     name,
-    email: z.string().email(),
+    email: z.string(),
+    description: z.string().optional(),
     password,
+    minOrderAmount: z.number(),
     address1: z.string(),
     address2: z.string().optional(),
     city: z.string(),
@@ -14,14 +17,17 @@ export const registerSchema = z.object({
 });
 
 export const loginSchema = z.object({
-    name,
+    email: z.string(),
     password,
 });
 
 export const updateSchema = z.object({
+    logo: z.string().optional(),
     name: name.optional(),
-    email: z.string().email().optional(),
+    email: z.string().optional(),
+    description: z.string().optional(),
     password,
+    minimumOrderAmount: z.number().optional(),
     address1: z.string().optional(),
     address2: z.string().optional(),
     city: z.string().optional(),

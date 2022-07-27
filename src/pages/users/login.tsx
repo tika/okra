@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { toastStyle } from "../../app/constants";
 import { fetcher } from "../../app/fetch";
 import { GetServerSideProps } from "next";
-import { JWT } from "../../app/jwt";
+import { JWT } from "../../app/userjwt";
 
 interface Props {}
 

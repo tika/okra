@@ -10,9 +10,9 @@ import {
     updateSchema,
 } from "../../../schemas/userschema";
 import argon2 from "argon2";
-import { JWT } from "../../../app/jwt";
+import { UserJWT } from "../../../app/userjwt";
 import { prisma } from "../../../app/prisma";
-import { sanitise } from "../../../app/abstractedtypes";
+import { sanitiseUser } from "../../../app/abstractedtypes";
 
 export default createEndpoint({
     POST: async (req, res) => {
@@ -38,15 +38,15 @@ export default createEndpoint({
             throw new ConflictError("user", "details");
         }
 
-        const jwt = new JWT(sanitise(newUser));
+        const jwt = new UserJWT(sanitiseUser(newUser));
         const token = jwt.sign();
 
-        res.setHeader("Set-Cookie", JWT.cookie(token));
+        res.setHeader("Set-Cookie", UserJWT.cookie(token));
 
         res.json({ token });
     },
     PATCH: async (req, res) => {
-        const user = JWT.parseRequest(req);
+        const user = UserJWT.parseRequest(req);
         const { name, email, newPassword, password } = updateSchema.parse(
             req.body
         );
@@ -65,10 +65,10 @@ export default createEndpoint({
             data: { name, email, password: newPassword },
         });
 
-        res.json(sanitise(updatedUser));
+        res.json(sanitiseUser(updatedUser));
     },
     DELETE: async (req, res) => {
-        const user = JWT.parseRequest(req);
+        const user = UserJWT.parseRequest(req);
         const { password } = deleteSchema.parse(req.body);
 
         if (!user) throw new NotFoundError("user");
@@ -82,7 +82,7 @@ export default createEndpoint({
 
         await prisma.user.delete({ where: { id: user.id } });
 
-        res.setHeader("Set-Cookie", JWT.logoutCookie());
+        res.setHeader("Set-Cookie", UserJWT.logoutCookie());
 
         res.json({ message: `Deleted account ${user.id}` });
     },

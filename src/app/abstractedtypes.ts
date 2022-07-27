@@ -1,21 +1,47 @@
 // Stores entity types that are safe to be shown to the web
-import { User } from ".prisma/client";
+import { User, Restaurant } from ".prisma/client";
 
 export type AbstractUser = Omit<
     User,
     "email" | "password" | "address1" | "address2" | "city" | "postcode"
 >;
+export type AbstractRestaurant = Omit<Restaurant, "email" | "password">;
 
-export function sanitise(user: User[]): AbstractUser[];
-export function sanitise(user: User): AbstractUser;
-export function sanitise(user: User | User[]) {
+export function sanitiseUser(user: User[]): AbstractUser[];
+export function sanitiseUser(user: User): AbstractUser;
+export function sanitiseUser(user: User | User[]) {
     if (Array.isArray(user)) {
         return user.map((u) => {
+            const {
+                email,
+                password,
+                address1,
+                address2,
+                city,
+                postcode,
+                ...useful
+            } = u;
+            return useful;
+        });
+    }
+
+    const { email, password, address1, address2, city, postcode, ...useful } =
+        user;
+    return useful;
+}
+
+export function sanitiseRestaurant(
+    restaurant: Restaurant[]
+): AbstractRestaurant[];
+export function sanitiseRestaurant(restaurant: Restaurant): AbstractRestaurant;
+export function sanitiseRestaurant(restaurant: Restaurant | Restaurant[]) {
+    if (Array.isArray(restaurant)) {
+        return restaurant.map((u) => {
             const { email, password, ...useful } = u;
             return useful;
         });
     }
 
-    const { email, password, ...useful } = user;
+    const { email, password, ...useful } = restaurant;
     return useful;
 }
