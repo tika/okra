@@ -1,6 +1,7 @@
 import "../styles/global.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { Toaster } from "react-hot-toast";
 
 export default function Okra({ Component, pageProps }: AppProps) {
     return (
@@ -24,6 +25,7 @@ export default function Okra({ Component, pageProps }: AppProps) {
                     href="/images/favicon-16x16.png"
                 />
             </Head>
+            <Toaster position="bottom-right" reverseOrder={false} />
             <Component {...pageProps} main="content" />
         </>
     );

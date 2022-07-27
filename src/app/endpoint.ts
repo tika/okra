@@ -31,9 +31,10 @@ export function createEndpoint<Resource>(
                 const issues = err.issues.map((it) => {
                     return { information: it.message, fields: it.path };
                 });
-                return res
-                    .status(422)
-                    .json({ message: "Invalid body", issues });
+                return res.status(422).json({
+                    message: `${issues[0].fields} ${issues[0].information}`,
+                    issues,
+                });
             }
 
             if (err instanceof Error) {

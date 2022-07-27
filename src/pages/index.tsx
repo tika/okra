@@ -3,6 +3,7 @@ import React from "react";
 import Logo from "../components/Logo";
 import styles from "../styles/Index.module.css";
 import { DefaultProps } from "../app/okra";
+import { Navbar } from "../components/Navbar";
 
 interface Props {}
 
@@ -10,16 +11,16 @@ export default function Index(props: DefaultProps & Props) {
     return (
         <div className={props.main}>
             <header>
-                <nav>
-                    <div className="logo">
-                        <Logo height="1.5em" width="1.5em" />
-                        <span>OKRA</span>
-                    </div>
+                <Navbar>
                     <div className={styles.buttons}>
-                        <button className="dark-btn">Sign Up</button>
-                        <button>Login</button>
+                        <a className="btn dark" href="/users/signup">
+                            Sign Up
+                        </a>
+                        <a className="btn" href="/users/login">
+                            Login
+                        </a>
                     </div>
-                </nav>
+                </Navbar>
             </header>
             <main className={styles.main}>
                 <div className={styles.top}>
@@ -28,7 +29,9 @@ export default function Index(props: DefaultProps & Props) {
                         door
                     </h1>
                     <h2>Log in to start ordering</h2>
-                    <button>Start</button>
+                    <a className="btn" href="/users/signup">
+                        Start
+                    </a>
                 </div>
                 <div className={styles.imageContainer}>
                     <div className={styles.image}>

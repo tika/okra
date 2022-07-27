@@ -39,7 +39,13 @@ export class JWT {
         });
     }
 
-    public static parseRequest(request: NextApiRequest): JWTPayload | null {
+    public static parseRequest(
+        request: IncomingMessage & {
+            cookies: Partial<{
+                [key: string]: string;
+            }>;
+        }
+    ): JWTPayload | null {
         if (!request || !request.headers.cookie) {
             return null;
         }

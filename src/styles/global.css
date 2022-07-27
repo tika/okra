@@ -12,10 +12,15 @@
 }
 
 * {
-    font-family: "Readex Pro";
+    font-family: "Readex Pro", sans-serif;
     padding: 0;
     margin: 0;
     color: white;
+}
+
+::selection {
+    background-color: var(--okra-green);
+    color: var(--dark);
 }
 
 .content {
@@ -51,7 +56,13 @@ nav > .logo > span {
     font-size: 1.5em;
 }
 
+.btn,
 button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    text-decoration: none;
+
     background-color: var(--okra-green);
     border: none;
     border-radius: 0.5em;
@@ -62,11 +73,13 @@ button {
     color: var(--dark);
 }
 
+.btn:hover,
 button:hover {
     opacity: 80%;
 }
 
-.dark-btn {
+.btn.dark,
+button.dark {
     background-color: var(--charcoal);
     color: var(--fg);
 }
@@ -87,4 +100,49 @@ h1 {
 h2 {
     font-weight: var(--regular);
     font-size: 1.25em;
+}
+
+h6 {
+    font-weight: var(--regular);
+    font-size: 1em;
+}
+
+input {
+    background-color: var(--charcoal);
+    border: none;
+    padding: 0.75em 1.25em;
+    min-width: 15em;
+    border-radius: 0.5em;
+    font-size: 1em;
+    font-weight: var(--regular);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 3em;
+    justify-content: center;
+    align-items: center;
+    margin-top: 7em;
+}
+
+.form > div {
+    text-align: center;
+}
+
+.form > div > h2 {
+    font-size: 1em;
+    font-weight: var(--medium);
+}
+
+.form > form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+}
+
+.form > form > button {
+    margin-top: 2em;
+    width: fit-content;
 }

@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 
-// @ts-ignore
-export const prisma: PrismaClient = global.___prisma___;
-
-if (!prisma) {
-    throw new Error("No Prisma connection found");
+declare global {
+    var prisma: PrismaClient | undefined;
 }
+
+export const prisma = global.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") global.prisma = prisma;
