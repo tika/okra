@@ -25,7 +25,6 @@ export default createEndpoint({
                 data: { ...data, password: hashedPassword },
             });
         } catch (e) {
-            console.log(e);
             throw new ConflictError("user", "details");
         }
 

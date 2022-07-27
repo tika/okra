@@ -6,18 +6,18 @@ import toast from "react-hot-toast";
 import { toastStyle } from "../../app/constants";
 import { fetcher } from "../../app/fetch";
 import { GetServerSideProps } from "next";
-import { UserJWT } from "../../app/userjwt";
+import { RestaurantJWT } from "../../app/restaurantjwt";
 
 interface Props {}
 
 export default function Login(props: Props & DefaultProps) {
-    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     function submit(e: FormEvent) {
         e.preventDefault();
         toast.promise(
-            fetcher("POST", "/users/login", { name, password }),
+            fetcher("POST", "/restaurants/login", { email, password }),
             {
                 loading: "Loading...",
                 success: <b>Logged in!</b>,
@@ -34,10 +34,10 @@ export default function Login(props: Props & DefaultProps) {
             </header>
             <main className="form">
                 <div>
-                    <h1>Login</h1>
+                    <h1>Restaurant Login</h1>
                     <h2>
                         Don&apos;t have an account?{" "}
-                        <a className="highlight" href="/users/signup">
+                        <a className="highlight" href="/restaurants/signup">
                             Sign Up
                         </a>
                     </h2>
@@ -45,10 +45,10 @@ export default function Login(props: Props & DefaultProps) {
 
                 <form onSubmit={submit}>
                     <FormInput
-                        title="Username or email"
+                        title="Email"
                         placeholder="e.g. name@example.com"
-                        value={name}
-                        onInput={(val) => setName(val)}
+                        value={email}
+                        onInput={(val) => setEmail(val)}
                         type="text"
                     />
                     <FormInput
@@ -66,12 +66,12 @@ export default function Login(props: Props & DefaultProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const user = UserJWT.parseRequest(ctx.req);
+    const restaurant = RestaurantJWT.parseRequest(ctx.req);
 
-    if (user) {
+    if (restaurant) {
         return {
             redirect: {
-                destination: "/users/app",
+                destination: "/restaurants/app",
                 permanent: false,
             },
         };

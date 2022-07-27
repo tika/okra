@@ -30,7 +30,7 @@ export class RestaurantJWT {
     }
 
     public static cookie(token: string, expiry?: Date): string {
-        return serialize("restaurant-token", token, {
+        return serialize("restaurantToken", token, {
             httpOnly: true,
             expires: expiry || dayjs().add(24, "hours").toDate(),
             secure: process.env.NODE_ENV === "production",
@@ -49,13 +49,13 @@ export class RestaurantJWT {
             return null;
         }
 
-        const { token = null } = parse(request.headers.cookie);
+        const { restaurantToken = null } = parse(request.headers.cookie);
 
-        if (!token) {
+        if (!restaurantToken) {
             return null;
         }
 
-        return RestaurantJWT.verify(token);
+        return RestaurantJWT.verify(restaurantToken);
     }
 
     public static verify(token?: string): JWTPayload | null {

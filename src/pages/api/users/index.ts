@@ -34,7 +34,6 @@ export default createEndpoint({
                 },
             });
         } catch (e) {
-            console.log(e);
             throw new ConflictError("user", "details");
         }
 

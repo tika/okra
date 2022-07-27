@@ -30,7 +30,7 @@ export class UserJWT {
     }
 
     public static cookie(token: string, expiry?: Date): string {
-        return serialize("user-token", token, {
+        return serialize("userToken", token, {
             httpOnly: true,
             expires: expiry || dayjs().add(24, "hours").toDate(),
             secure: process.env.NODE_ENV === "production",
@@ -49,13 +49,13 @@ export class UserJWT {
             return null;
         }
 
-        const { token = null } = parse(request.headers.cookie);
+        const { userToken = null } = parse(request.headers.cookie);
 
-        if (!token) {
+        if (!userToken) {
             return null;
         }
 
-        return UserJWT.verify(token);
+        return UserJWT.verify(userToken);
     }
 
     public static verify(token?: string): JWTPayload | null {

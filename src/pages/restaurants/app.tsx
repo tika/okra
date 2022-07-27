@@ -1,12 +1,12 @@
-import { User } from "@prisma/client";
+import { Restaurant, User } from "@prisma/client";
 import { GetServerSideProps } from "next";
-import { UserJWT } from "../../app/userjwt";
+import { RestaurantJWT } from "../../app/restaurantjwt";
 import { DefaultProps } from "../../app/okra";
 import { Navbar } from "../../components/Navbar";
 import { prisma } from "../../app/prisma";
 
 interface Props {
-    user: User;
+    restaurant: Restaurant;
 }
 
 export default function App(props: Props & DefaultProps) {
@@ -15,28 +15,30 @@ export default function App(props: Props & DefaultProps) {
             <header>
                 <Navbar />
             </header>
-            <h1>Hello, {props.user.name}</h1>
+            <h1>Hello, {props.restaurant.name}</h1>
         </div>
     );
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const user = UserJWT.parseRequest(ctx.req);
+    const restaurant = RestaurantJWT.parseRequest(ctx.req);
 
-    if (!user) {
+    if (!restaurant) {
         return {
             redirect: {
-                destination: "/users/login",
+                destination: "/restaurants/login",
                 permanent: false,
             },
         };
     }
 
-    const fullUser = await prisma.user.findFirst({ where: { id: user.id } });
+    const fullRestaurant = await prisma.restaurant.findFirst({
+        where: { id: restaurant.id },
+    });
 
     return {
         props: {
-            user: fullUser,
+            restaurant: fullRestaurant,
         },
     };
 };
