@@ -27,7 +27,7 @@ model User {
 model Restaurant {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
-  logo String?
+  logo String
   name String
   email String @unique
   description String?

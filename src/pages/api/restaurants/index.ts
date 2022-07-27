@@ -13,6 +13,7 @@ import argon2 from "argon2";
 import { RestaurantJWT } from "../../../app/restaurantjwt";
 import { prisma } from "../../../app/prisma";
 import { sanitiseRestaurant } from "../../../app/abstractedtypes";
+import { convertImage } from "../../../app/convertimage";
 
 export default createEndpoint({
     POST: async (req, res) => {
@@ -22,10 +23,14 @@ export default createEndpoint({
         try {
             const hashedPassword = await argon2.hash(data.password);
             newRestaurant = await prisma.restaurant.create({
-                data: { ...data, password: hashedPassword },
+                data: {
+                    ...data,
+                    password: hashedPassword,
+                    logo: convertImage(data.logo),
+                },
             });
         } catch (e) {
-            throw new ConflictError("user", "details");
+            throw new ConflictError("restaurant", "details");
         }
 
         const jwt = new RestaurantJWT(sanitiseRestaurant(newRestaurant));
@@ -50,8 +55,19 @@ export default createEndpoint({
                 fullRestaurant!.password as string,
                 data.password
             ))
-        )
+        ) {
             throw new AuthorizationError("restaurant");
+        }
+
+        // Hash new password
+        if (data.newPassword) {
+            data.newPassword = await argon2.hash(data.password);
+        }
+
+        // Update logo
+        if (data.logo) {
+            data.logo = convertImage(data.logo);
+        }
 
         const updatedRestaurant = await prisma.restaurant.update({
             where: { id: restaurant.id },
@@ -75,7 +91,7 @@ export default createEndpoint({
         )
             throw new AuthorizationError("restaurant");
 
-        await prisma.user.delete({ where: { id: restaurant.id } });
+        await prisma.restaurant.delete({ where: { id: restaurant.id } });
 
         res.setHeader("Set-Cookie", RestaurantJWT.logoutCookie());
 

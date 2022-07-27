@@ -5,31 +5,31 @@ import {
     NotFoundError,
 } from "../../../app/exceptions";
 import { prisma } from "../../../app/prisma";
-import { loginSchema } from "../../../schemas/userschema";
+import { loginSchema } from "../../../schemas/restaurantschema";
 import argon2 from "argon2";
-import { JWT } from "../../../app/userjwt";
-import { sanitise } from "../../../app/abstractedtypes";
+import { RestaurantJWT } from "../../../app/restaurantjwt";
+import { sanitiseRestaurant } from "../../../app/abstractedtypes";
 
 export default createEndpoint({
     POST: async (req, res) => {
-        const { name, password } = loginSchema.parse(req.body);
-        if (!name) throw new InvalidDataError("email or username", "body");
+        const { email, password } = loginSchema.parse(req.body);
+        if (!email) throw new InvalidDataError("email", "body");
 
-        const user = await prisma.user.findFirst({
+        const restaurant = await prisma.restaurant.findFirst({
             where: {
-                OR: [{ email: name }, { name }],
+                email,
             },
         });
 
-        if (!user) throw new NotFoundError("user");
+        if (!restaurant) throw new NotFoundError("restaurant");
 
-        if (!(await argon2.verify(user.password as string, password)))
-            throw new AuthorizationError("user");
+        if (!(await argon2.verify(restaurant.password as string, password)))
+            throw new AuthorizationError("restaurant");
 
-        const jwt = new JWT(sanitise(user));
+        const jwt = new RestaurantJWT(sanitiseRestaurant(restaurant));
         const token = jwt.sign();
 
-        res.setHeader("Set-Cookie", JWT.cookie(token));
+        res.setHeader("Set-Cookie", RestaurantJWT.cookie(token));
 
         res.json({ token });
     },

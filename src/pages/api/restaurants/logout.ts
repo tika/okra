@@ -1,9 +1,9 @@
 import { createEndpoint } from "../../../app/endpoint";
-import { JWT } from "../../../app/userjwt";
+import { RestaurantJWT } from "../../../app/restaurantjwt";
 
 export default createEndpoint({
     POST: async (req, res) => {
-        res.setHeader("Set-Cookie", JWT.cookie("", new Date()));
+        res.setHeader("Set-Cookie", RestaurantJWT.cookie("", new Date()));
         res.json({ message: "Logged out" });
     },
 });

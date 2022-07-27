@@ -75,7 +75,7 @@ export default function SignUp(props: DefaultProps & Props) {
 
                 <form onSubmit={submit}>
                     <FormInput
-                        title="Logo"
+                        title="Logo*"
                         placeholder="URL of image"
                         value={logo}
                         onInput={(val) => setLogo(val)}

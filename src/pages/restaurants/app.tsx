@@ -4,6 +4,7 @@ import { RestaurantJWT } from "../../app/restaurantjwt";
 import { DefaultProps } from "../../app/okra";
 import { Navbar } from "../../components/Navbar";
 import { prisma } from "../../app/prisma";
+import { DisplayRestaurant } from "../../components/DisplayRestaurant";
 
 interface Props {
     restaurant: Restaurant;
@@ -15,6 +16,7 @@ export default function App(props: Props & DefaultProps) {
             <header>
                 <Navbar />
             </header>
+            <DisplayRestaurant restaurant={props.restaurant} />
             <h1>Hello, {props.restaurant.name}</h1>
         </div>
     );

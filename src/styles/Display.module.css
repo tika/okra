@@ -1,0 +1,17 @@
+.image {
+    width: 2.5em;
+    height: 2.5em;
+    position: relative;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.main > span {
+    font-size: 1em;
+}
