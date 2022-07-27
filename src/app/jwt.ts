@@ -1,9 +1,10 @@
 import { User } from "@prisma/client";
-import { serialize, parse } from "cookie";
+import { parse, serialize } from "cookie";
 import * as jwt from "jsonwebtoken";
 import dayjs from "dayjs";
 import { IncomingMessage } from "http";
 import { AbstractUser } from "./abstractedtypes";
+import { NextApiRequest } from "next";
 
 export type JWTPayload = Pick<User, "id">;
 
@@ -38,9 +39,7 @@ export class JWT {
         });
     }
 
-    public static parseRequest(
-        request: IncomingMessage & { cookies?: { [key: string]: string } }
-    ) {
+    public static parseRequest(request: NextApiRequest): JWTPayload | null {
         if (!request || !request.headers.cookie) {
             return null;
         }
@@ -62,7 +61,6 @@ export class JWT {
                 token,
                 JWT.SECRET_KEY
             ) as JWTPayload;
-            console.log("Payload " + payload);
             return payload;
         } catch (_) {
             return null;

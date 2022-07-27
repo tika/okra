@@ -21,6 +21,7 @@ model User {
   city String
   postcode String
   orders Order[]
+  reviews Review[]
 }
 
 model Restaurant {
@@ -38,6 +39,7 @@ model Restaurant {
   postcode String
   menu Item[]
   orders Order[] // Orders placed on this restaurant
+  reviews Review[]
 }
 
 model Item {
@@ -53,10 +55,23 @@ model Item {
 
 model Order {
   id String @id @default(cuid())
+  createdAt DateTime @default(now())
   user User @relation(references: [id], fields: [userId])
   userId Int
   items Item[]
   restaurant Restaurant @relation(references: [id], fields: [restaurantId])
   restaurantId Int
   total Float
+}
+
+model Review {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  rating Int // out of 5
+  title String
+  Description String
+  restaurant Restaurant @relation(references: [id], fields: [restaurantId])
+  restaurantId Int
+  user User @relation(references: [id], fields: [userId])
+  userId Int
 }

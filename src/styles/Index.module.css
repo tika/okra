@@ -2,3 +2,32 @@
     display: flex;
     gap: 1em;
 }
+
+.image {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 0.75em * 2 - 1em - 2em * 2 - 2.5em);
+    z-index: 1;
+}
+
+.top {
+    z-index: 10;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+}
+
+.top > button {
+    margin-top: 2em;
+}
+
+.main {
+    position: relative;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+}
