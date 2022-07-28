@@ -50,7 +50,7 @@ export default function Index(props: DefaultProps & Props) {
                         Tika
                     </a>
                 </p>
-                <p>Own a restaurant?</p>
+                <a href="/restaurants/login">Own a restaurant?</a>
             </footer>
         </div>
     );

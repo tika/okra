@@ -1,10 +1,11 @@
-import { Restaurant, User } from "@prisma/client";
+import { Restaurant } from "@prisma/client";
 import { GetServerSideProps } from "next";
-import { RestaurantJWT } from "../../app/restaurantjwt";
-import { DefaultProps } from "../../app/okra";
-import { Navbar } from "../../components/Navbar";
-import { prisma } from "../../app/prisma";
-import { DisplayRestaurant } from "../../components/DisplayRestaurant";
+import { RestaurantJWT } from "../../../app/restaurantjwt";
+import { DefaultProps } from "../../../app/okra";
+import { Navbar } from "../../../components/Navbar";
+import { prisma } from "../../../app/prisma";
+import { DisplayRestaurant } from "../../../components/DisplayRestaurant";
+import styles from "../../../styles/RestaurantApp.module.css";
 
 interface Props {
     restaurant: Restaurant;
@@ -22,7 +23,17 @@ export default function App(props: Props & DefaultProps) {
             </header>
 
             <main>
-                <h1>Menu Items</h1>
+                <div className={styles.columns}>
+                    <div>
+                        <h1>Reviews</h1>
+                    </div>
+                    <div>
+                        <h1>Recent fufilled orders</h1>
+                    </div>
+                    <div>
+                        <h1>Earnings</h1>
+                    </div>
+                </div>
             </main>
         </div>
     );

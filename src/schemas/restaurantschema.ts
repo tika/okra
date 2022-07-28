@@ -27,7 +27,10 @@ export const updateSchema = z.object({
     email: z.string().optional(),
     description: z.string().optional(),
     password,
-    minimumOrderAmount: z.number().optional(),
+    minOrderAmount: z
+        .string()
+        .transform((it) => Number(it))
+        .optional(),
     address1: z.string().optional(),
     address2: z.string().optional(),
     city: z.string().optional(),

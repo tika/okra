@@ -70,7 +70,11 @@ export default createEndpoint({
         }
 
         const { password, newPassword, ...toSend } = data;
-        const d = { ...toSend, password: newPassword };
+        const d = {
+            ...toSend,
+            password: newPassword,
+            minOrderAmount: Number(data.minOrderAmount),
+        };
 
         const updatedRestaurant = await prisma.restaurant.update({
             where: { id: restaurant.id },
