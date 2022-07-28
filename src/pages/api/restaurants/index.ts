@@ -69,11 +69,14 @@ export default createEndpoint({
             data.logo = convertImage(data.logo);
         }
 
+        if (data.minOrderAmount) {
+            data.minOrderAmount = Number(data.minOrderAmount);
+        }
+
         const { password, newPassword, ...toSend } = data;
         const d = {
             ...toSend,
             password: newPassword,
-            minOrderAmount: Number(data.minOrderAmount),
         };
 
         const updatedRestaurant = await prisma.restaurant.update({
