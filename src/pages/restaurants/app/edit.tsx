@@ -167,7 +167,7 @@ export default function Edit({ restaurant, main }: Props & DefaultProps) {
                             />
                             <h2 style={{ marginTop: "1em" }}>Misc</h2>
                             <FormInput
-                                title={`Minimum order amount (currently $${restaurant.minOrderAmount})`}
+                                title={`Minimum order amount (currently £${restaurant.minOrderAmount})`}
                                 value={minOrderAmount}
                                 onInput={(val) => setMinOrderAmount(val)}
                                 type="text"

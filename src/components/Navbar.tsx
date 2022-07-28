@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import Logo from "./Logo";
 
 interface Navbar {
@@ -6,12 +7,21 @@ interface Navbar {
 
 // Component where the children are on the right side of the navbar
 export function Navbar(props: Navbar) {
+    const router = useRouter();
+
     return (
         <nav>
-            <div className="logo">
+            <a
+                className="logo"
+                href={
+                    router.asPath.includes("restaurants")
+                        ? "/restaurants/app"
+                        : "/users/app"
+                }
+            >
                 <Logo height="1.5em" width="1.5em" />
                 <span>OKRA</span>
-            </div>
+            </a>
             <div className="spaced">{props.children}</div>
         </nav>
     );

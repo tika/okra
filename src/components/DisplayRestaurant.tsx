@@ -8,11 +8,11 @@ interface Props {
 
 export function DisplayRestaurant(props: Props) {
     return (
-        <div className={styles.main}>
+        <a className={styles.main} href="/restaurants/app/edit">
             <div className={styles.image}>
                 <Image src={props.restaurant.logo} layout="fill" />
             </div>
             <span>{props.restaurant.name}</span>
-        </div>
+        </a>
     );
 }

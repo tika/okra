@@ -8,7 +8,7 @@ interface Props {
 
 export function DisplayUser(props: Props) {
     return (
-        <div className={styles.main}>
+        <a className={styles.main} href="/users/app/edit">
             <Avatar
                 size="2.5em"
                 name={props.user.name}
@@ -21,6 +21,6 @@ export function DisplayUser(props: Props) {
                 ]}
             />
             <span>{props.user.name}</span>
-        </div>
+        </a>
     );
 }
