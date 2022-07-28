@@ -46,9 +46,7 @@ export default createEndpoint({
     },
     PATCH: async (req, res) => {
         const user = UserJWT.parseRequest(req);
-        const { name, email, newPassword, password } = updateSchema.parse(
-            req.body
-        );
+        const data = updateSchema.parse(req.body);
 
         if (!user) throw new NotFoundError("user");
 
@@ -56,12 +54,23 @@ export default createEndpoint({
             where: { id: user.id },
         });
 
-        if (!(await argon2.verify(fullUser!.password as string, password)))
+        if (
+            !(await argon2.verify(fullUser!.password as string, data.password))
+        ) {
             throw new AuthorizationError("user");
+        }
+
+        // Hash new password
+        if (data.newPassword) {
+            data.newPassword = await argon2.hash(data.newPassword);
+        }
+
+        const { password, newPassword, ...toSend } = data;
+        const d = { ...toSend, password: newPassword };
 
         const updatedUser = await prisma.user.update({
             where: { id: user.id },
-            data: { name, email, password: newPassword },
+            data: d,
         });
 
         res.json(sanitiseUser(updatedUser));

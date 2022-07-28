@@ -1,0 +1,61 @@
+.center {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.restaurant {
+    width: 25em;
+    background-color: var(--coal);
+    border-radius: 0.5em;
+}
+
+.restaurant:hover {
+    opacity: 80%;
+    cursor: pointer;
+}
+
+.details {
+    margin-bottom: 1em;
+}
+
+.details > h1 {
+    font-size: 1.5em;
+    font-weight: var(--semibold);
+}
+
+.details > h2 {
+    font-size: 1em;
+    font-weight: var(--regular);
+}
+
+.img {
+    width: 100%;
+    min-height: 10em;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5em 0.5em 0 0;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.info > span {
+    font-size: 1em;
+}
+
+.restaurants {
+    display: flex;
+    column-gap: 1em;
+    row-gap: 5em;
+    margin-top: 1em;
+    flex-wrap: wrap;
+}
+
+.padding {
+    padding: 1em;
+}

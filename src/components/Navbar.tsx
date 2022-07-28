@@ -12,7 +12,7 @@ export function Navbar(props: Navbar) {
                 <Logo height="1.5em" width="1.5em" />
                 <span>OKRA</span>
             </div>
-            {props.children}
+            <div className="spaced">{props.children}</div>
         </nav>
     );
 }

@@ -7,6 +7,8 @@
     --cloudy: #a4a4a4;
     --dark: #121212;
     --charcoal: #2c2c2c;
+    --coal: #1f1f1f;
+    --danger: #ff7777;
 
     --bold: 700;
     --semibold: 600;
@@ -148,4 +150,30 @@ input {
 .form > form > button {
     margin-top: 2em;
     width: fit-content;
+}
+
+.spaced {
+    display: flex;
+    align-items: center;
+    gap: 2em;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    opacity: 80%;
+}
+
+code {
+    font-family: monospace;
+    background-color: var(--charcoal);
+    padding: 2px 8px;
+    border-radius: 2px;
+    color: var(--okra-green);
+}
+
+.danger {
+    background-color: var(--danger);
 }

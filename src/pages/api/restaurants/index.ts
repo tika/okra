@@ -61,7 +61,7 @@ export default createEndpoint({
 
         // Hash new password
         if (data.newPassword) {
-            data.newPassword = await argon2.hash(data.password);
+            data.newPassword = await argon2.hash(data.newPassword);
         }
 
         // Update logo
@@ -69,9 +69,12 @@ export default createEndpoint({
             data.logo = convertImage(data.logo);
         }
 
+        const { password, newPassword, ...toSend } = data;
+        const d = { ...toSend, password: newPassword };
+
         const updatedRestaurant = await prisma.restaurant.update({
             where: { id: restaurant.id },
-            data: data,
+            data: d,
         });
 
         res.json(sanitiseRestaurant(updatedRestaurant));
