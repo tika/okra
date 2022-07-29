@@ -1,0 +1,28 @@
+.main {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.container {
+    width: 40vw;
+}
+
+.items {
+    display: flex;
+    flex-direction: column;
+    gap: 5em;
+    margin-top: 2em;
+}
+
+.item > span {
+    margin-bottom: 5em;
+}
+
+.divide {
+    margin: 3em 0;
+}
+
+.newItem {
+    margin-bottom: 1em;
+}

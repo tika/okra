@@ -39,7 +39,7 @@ export default function App(props: Props & DefaultProps) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     const restaurant = RestaurantJWT.parseRequest(ctx.req);
 
     if (!restaurant) {
@@ -54,6 +54,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const fullRestaurant = await prisma.restaurant.findFirst({
         where: { id: restaurant.id },
     });
+
+    if (!fullRestaurant) {
+        return {
+            redirect: {
+                destination: "/restaurants/login",
+                permanent: false,
+            },
+        };
+    }
 
     return {
         props: {

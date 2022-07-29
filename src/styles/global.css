@@ -177,3 +177,7 @@ code {
 .danger {
     background-color: var(--danger);
 }
+
+.danger-text {
+    color: var(--danger);
+}

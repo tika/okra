@@ -7,6 +7,7 @@ import { toastStyle } from "../../app/constants";
 import { fetcher } from "../../app/fetch";
 import { GetServerSideProps } from "next";
 import { UserJWT } from "../../app/userjwt";
+import { useRouter } from "next/router";
 
 interface Props {}
 
@@ -14,10 +15,18 @@ export default function Login(props: Props & DefaultProps) {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
 
+    const router = useRouter();
+
     function submit(e: FormEvent) {
         e.preventDefault();
+
+        async function actions() {
+            await fetcher("POST", "/users/login", { name, password });
+            await router.push("/users/app");
+        }
+
         toast.promise(
-            fetcher("POST", "/users/login", { name, password }),
+            actions(),
             {
                 loading: "Loading...",
                 success: <b>Logged in!</b>,
@@ -65,7 +74,7 @@ export default function Login(props: Props & DefaultProps) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     const user = UserJWT.parseRequest(ctx.req);
 
     if (user) {

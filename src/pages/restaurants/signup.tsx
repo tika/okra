@@ -32,20 +32,25 @@ export default function SignUp(props: DefaultProps & Props) {
             return toast.error("Passwords don't match", { style: toastStyle });
         }
 
+        async function actions() {
+            await fetcher("POST", "/restaurants", {
+                name,
+                email,
+                password,
+                logo,
+                description,
+                minOrderAmount,
+                address1,
+                address2,
+                city,
+                postcode,
+            });
+            await router.push("/restaurants/app");
+        }
+
         toast
             .promise(
-                fetcher("POST", "/restaurants", {
-                    name,
-                    email,
-                    password,
-                    logo,
-                    description,
-                    minOrderAmount,
-                    address1,
-                    address2,
-                    city,
-                    postcode,
-                }),
+                actions(),
                 {
                     loading: "Loading...",
                     success: <b>Created account!</b>,
@@ -152,7 +157,7 @@ export default function SignUp(props: DefaultProps & Props) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     const restaurant = RestaurantJWT.parseRequest(ctx.req);
 
     if (restaurant) {

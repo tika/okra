@@ -134,7 +134,7 @@ export default function SignUp(props: DefaultProps & Props) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     const user = UserJWT.parseRequest(ctx.req);
 
     if (user) {

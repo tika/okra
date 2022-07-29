@@ -1,3 +1,5 @@
+import { Item } from "@prisma/client";
+
 export interface SVGProps {
     height: string | number;
     width: string | number;
@@ -6,3 +8,7 @@ export interface SVGProps {
 export interface DefaultProps {
     main: string;
 }
+
+export type BaseItem = Omit<Item, "id" | "restaurantId"> & {
+    id: number | undefined;
+};

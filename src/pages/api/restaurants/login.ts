@@ -1,9 +1,5 @@
 import { createEndpoint } from "../../../app/endpoint";
-import {
-    AuthorizationError,
-    InvalidDataError,
-    NotFoundError,
-} from "../../../app/exceptions";
+import { AuthorizationError, NotFoundError } from "../../../app/exceptions";
 import { prisma } from "../../../app/prisma";
 import { loginSchema } from "../../../schemas/restaurantschema";
 import argon2 from "argon2";
@@ -13,7 +9,6 @@ import { sanitiseRestaurant } from "../../../app/abstractedtypes";
 export default createEndpoint({
     POST: async (req, res) => {
         const { email, password } = loginSchema.parse(req.body);
-        if (!email) throw new InvalidDataError("email", "body");
 
         const restaurant = await prisma.restaurant.findFirst({
             where: {

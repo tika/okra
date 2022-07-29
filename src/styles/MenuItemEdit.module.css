@@ -1,0 +1,28 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1em;
+}
+
+.main > div {
+    width: 100%;
+}
+
+.main > div > input {
+    min-width: calc(100% - 2.5em);
+}
+
+.delete {
+    cursor: pointer;
+}
+
+.delete:hover {
+    color: var(--okra-green);
+}

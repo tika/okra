@@ -14,7 +14,6 @@ import { useRouter } from "next/router";
 import { RestaurantJWT } from "../../../app/restaurantjwt";
 import { DisplayRestaurant } from "../../../components/DisplayRestaurant";
 import { isNumber } from "../../../app/number";
-import { z } from "zod";
 
 interface Props {
     restaurant: Restaurant;

@@ -7,6 +7,7 @@ import { toastStyle } from "../../app/constants";
 import { fetcher } from "../../app/fetch";
 import { GetServerSideProps } from "next";
 import { RestaurantJWT } from "../../app/restaurantjwt";
+import { useRouter } from "next/router";
 
 interface Props {}
 
@@ -14,10 +15,18 @@ export default function Login(props: Props & DefaultProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const router = useRouter();
+
     function submit(e: FormEvent) {
         e.preventDefault();
+
+        async function actions() {
+            await fetcher("POST", "/restaurants/login", { email, password });
+            await router.push("/restaurants/app");
+        }
+
         toast.promise(
-            fetcher("POST", "/restaurants/login", { email, password }),
+            actions(),
             {
                 loading: "Loading...",
                 success: <b>Logged in!</b>,
@@ -65,7 +74,7 @@ export default function Login(props: Props & DefaultProps) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     const restaurant = RestaurantJWT.parseRequest(ctx.req);
 
     if (restaurant) {
