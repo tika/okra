@@ -25,6 +25,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
     return (
         <div className={props.main}>
             <header>
+                <title>{props.restaurant.name}</title>
                 <Navbar>
                     <a className={styles.cart}>
                         <ShoppingCartIcon width="1.5em" height="100%" />
@@ -36,9 +37,6 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
             <main>
                 <div>
                     <h1>{props.restaurant.name}</h1>
-                    <h2>
-                        <span>CLOSED</span> Opens at 16:30 - 21:00
-                    </h2>
                     <div className={styles.info}>
                         <div>
                             <StarIcon />

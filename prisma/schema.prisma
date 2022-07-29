@@ -33,6 +33,7 @@ model Restaurant {
   description String?
   password String
   minOrderAmount Float
+  deliveryFee Float
   address1 String
   address2 String?
   city String
@@ -48,6 +49,7 @@ model Item {
   name String
   price Float
   description String?
+  category String
   restaurant Restaurant @relation(references: [id], fields: [restaurantId])
   restaurantId Int
   orders Order[]
@@ -56,6 +58,7 @@ model Item {
 model Order {
   id String @id @default(cuid())
   createdAt DateTime @default(now())
+  completedAt DateTime? // when the order has been completed
   user User @relation(references: [id], fields: [userId])
   userId Int
   items Item[]

@@ -10,6 +10,7 @@ export const registerSchema = z.object({
     description: z.string().optional(),
     password,
     minOrderAmount: z.number(),
+    deliveryFee: z.number(),
     address1: z.string(),
     address2: z.string().optional(),
     city: z.string(),

@@ -18,6 +18,7 @@ export function MenuItemEdit({ item, ...props }: Props) {
     const [price, setPrice] = useState(item?.price.toString() ?? "");
     const [description, setDescription] = useState(item?.description ?? "");
     const [image, setImage] = useState(item?.image ?? "");
+    const [category, setCategory] = useState(item?.category ?? "");
 
     function submit(e: FormEvent) {
         e.preventDefault();
@@ -33,6 +34,7 @@ export function MenuItemEdit({ item, ...props }: Props) {
             price: Number(price),
             description,
             image,
+            category,
         };
 
         props.action(data);
@@ -73,8 +75,15 @@ export function MenuItemEdit({ item, ...props }: Props) {
                 type="text"
             />
             <FormInput
+                title="Category*"
+                placeholder="e.g. Salads/Burgers/Wraps"
+                value={description}
+                onInput={(val) => setDescription(val)}
+                type="text"
+            />
+            <FormInput
                 title="Description"
-                placeholder="Beautiful golden pancakes made with flour and vegan meat. What a treat, you can get this now for lorem ipsum"
+                placeholder="e.g. Great quality, low on price"
                 value={description}
                 onInput={(val) => setDescription(val)}
                 type="text"

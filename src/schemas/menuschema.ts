@@ -6,6 +6,7 @@ export const createSchema = z.object({
         image: z.string().optional(),
         name: z.string(),
         price: z.number(),
+        category: z.string(),
         description: z.string().optional(),
     }),
 });

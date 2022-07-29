@@ -4,8 +4,14 @@
     gap: 5px;
 }
 
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .info > div {
-    height: 4em;
+    height: 1.5em;
     display: flex;
     align-items: center;
 }
@@ -14,4 +20,9 @@
     stroke: var(--okra-green);
     height: 100%;
     width: fit-content;
+}
+
+.status {
+    font-size: 1em;
+    font-weight: var(--semibold);
 }
