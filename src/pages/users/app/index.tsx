@@ -8,6 +8,7 @@ import { DisplayUser } from "../../../components/DisplayUser";
 import styles from "../../../styles/UserApp.module.css";
 import Image from "next/image";
 import { LocationMarkerIcon, ShoppingCartIcon } from "@heroicons/react/outline";
+import { useRouter } from "next/router";
 
 interface Props {
     user: User;
@@ -15,6 +16,8 @@ interface Props {
 }
 
 export default function App(props: Props & DefaultProps) {
+    const router = useRouter();
+
     return (
         <div className={props.main}>
             <header>
@@ -23,7 +26,6 @@ export default function App(props: Props & DefaultProps) {
                 </Navbar>
             </header>
             <main className={styles.center}>
-                <div></div>
                 <div>
                     <h1>Your hunger stops here.</h1>
                     <h2 className="highlight">Find food in seconds.</h2>
@@ -35,7 +37,13 @@ export default function App(props: Props & DefaultProps) {
                     </h6>
                     <div className={styles.restaurants}>
                         {props.restaurants.map((it) => (
-                            <div key={it.id} className={styles.restaurant}>
+                            <div
+                                key={it.id}
+                                className={styles.restaurant}
+                                onClick={() =>
+                                    router.push(`/users/app/${it.id}`)
+                                }
+                            >
                                 <div className={styles.img}>
                                     <Image src={it.logo} layout="fill" />
                                 </div>

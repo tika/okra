@@ -72,6 +72,7 @@ export default function Edit({ restaurant, main }: Props & DefaultProps) {
                 }
             });
 
+            
             await fetcher("PATCH", "/restaurants", submittedData);
             await router.push("/restaurants/app/edit");
         }

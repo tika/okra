@@ -24,32 +24,28 @@ export default createEndpoint({
 
         if (!restaurant) throw new NotFoundError("restaurant");
 
-        // Then just connect it to one that already exists
-        if (item.id) {
-            const updatedRestaurant = await prisma.restaurant.update({
-                where: { id: restaurant.id },
-                data: {
-                    menu: {
-                        connect: item,
-                    },
-                },
-                include: {
-                    menu: true,
-                },
-            });
-
-            return res.send({ updatedMenu: updatedRestaurant.menu });
-        }
-
         const { id, ...itemWithoutId } = item;
+
+        // This is what is sent to prisma as a query
+        // If there is an item id, then we want to update the menu where the item.id = item.id
+        // And set this new data
+        // Otherwise create a new item
+        const toSendObject = item.id
+            ? {
+                  update: {
+                      where: { id: item.id },
+                      data: itemWithoutId,
+                  },
+              }
+            : {
+                  create: itemWithoutId,
+              };
 
         // We are creating a new item
         const updatedRestaurant = await prisma.restaurant.update({
             where: { id: restaurant.id },
             data: {
-                menu: {
-                    create: itemWithoutId,
-                },
+                menu: toSendObject,
             },
             include: {
                 menu: true,

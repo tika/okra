@@ -10,6 +10,7 @@ interface Props {
     item?: BaseItem;
     action(newItem: BaseItem): void;
     onDelete?: (id: number) => void;
+    shouldClear?: boolean;
 }
 
 export function MenuItemEdit({ item, ...props }: Props) {
@@ -35,7 +36,10 @@ export function MenuItemEdit({ item, ...props }: Props) {
         };
 
         props.action(data);
-        clear();
+
+        if (props.shouldClear) {
+            clear();
+        }
     }
 
     function clear() {

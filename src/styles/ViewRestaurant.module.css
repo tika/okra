@@ -1,0 +1,17 @@
+.cart {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.info > div {
+    height: 4em;
+    display: flex;
+    align-items: center;
+}
+
+.info > div > svg {
+    stroke: var(--okra-green);
+    height: 100%;
+    width: fit-content;
+}

@@ -23,6 +23,7 @@ export default function App(props: Props & DefaultProps) {
 
     // When this function is called, we want to take the values of the item provided
     function edit(newItem: BaseItem) {
+        console.log(newItem);
         async function actions() {
             await fetcher("POST", "/restaurants/menu", {
                 item: newItem,
@@ -34,7 +35,7 @@ export default function App(props: Props & DefaultProps) {
             actions(),
             {
                 loading: "Loading...",
-                success: <b>Created new item!</b>,
+                success: <b>Updated menu</b>,
                 error: (e) => e.message || <b>Something went wrong</b>,
             },
             { style: toastStyle }
@@ -92,7 +93,7 @@ export default function App(props: Props & DefaultProps) {
                     <hr className={styles.divide} />
                     <div>
                         <h2 className={styles.newItem}>New item</h2>
-                        <MenuItemEdit action={edit} />
+                        <MenuItemEdit shouldClear action={edit} />
                     </div>
                 </div>
             </main>
