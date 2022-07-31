@@ -13,7 +13,7 @@ import { toastStyle } from "../../../app/constants";
 import { useRouter } from "next/router";
 import { RestaurantJWT } from "../../../app/restaurantjwt";
 import { DisplayRestaurant } from "../../../components/DisplayRestaurant";
-import { isNumber } from "../../../app/number";
+import { isNumber } from "../../../app/primitive";
 
 interface Props {
     restaurant: Restaurant;
@@ -72,7 +72,7 @@ export default function Edit({ restaurant, main }: Props & DefaultProps) {
                 }
             });
 
-            
+
             await fetcher("PATCH", "/restaurants", submittedData);
             await router.push("/restaurants/app/edit");
         }

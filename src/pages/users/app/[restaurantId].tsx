@@ -6,12 +6,16 @@ import { Navbar } from "../../../components/Navbar";
 import { prisma } from "../../../app/prisma";
 import { DisplayUser } from "../../../components/DisplayUser";
 import styles from "../../../styles/ViewRestaurant.module.css";
-import { isNumber } from "../../../app/number";
+import { isNumber, capitalise } from "../../../app/primitive";
 import {
+    CurrencyPoundIcon,
     LocationMarkerIcon,
+    SearchIcon,
     ShoppingCartIcon,
     StarIcon,
 } from "@heroicons/react/outline";
+import { MenuItem } from "../../../components/MenuItem";
+import { useState } from "react";
 
 interface Props {
     user: User;
@@ -19,9 +23,30 @@ interface Props {
     menu: Item[];
     reviewCount: number;
     starAverage: number;
+    lastOrderCompletedAt: Date | null;
 }
 
 export default function ViewRestaurant(props: Props & DefaultProps) {
+    const [itemsShown, setItemsShown] = useState(props.menu);
+
+    // Gets categories from the items shown
+    function getCategories() {
+        return Array.from(
+            new Set(itemsShown.map((it) => capitalise(it.category)))
+        );
+    }
+
+    // Matches name
+    function onSearch(val: string) {
+        if (val === "") return setItemsShown(props.menu);
+
+        setItemsShown(
+            props.menu.filter((it) =>
+                it.name.toLowerCase().includes(val.toLowerCase())
+            )
+        );
+    }
+
     return (
         <div className={props.main}>
             <header>
@@ -34,8 +59,8 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                     <DisplayUser user={props.user} />
                 </Navbar>
             </header>
-            <main>
-                <div>
+            <main className={styles.main}>
+                <div className={styles.sidebar}>
                     <h1>{props.restaurant.name}</h1>
                     <div className={styles.info}>
                         <div>
@@ -47,18 +72,66 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                         </div>
                         <div>
                             <LocationMarkerIcon />
-                            <span>0.22 miles away</span>
-                        </div>
-                        <div>
-                            <ShoppingCartIcon />
-                            <span>Last order completed at</span>
+                            <span>0.22 miles away • 2 mins away</span>
                         </div>
                         <div>
                             <ShoppingCartIcon />
                             <span>
+                                {props.lastOrderCompletedAt
+                                    ? `Last order completed at
+                                ${props.lastOrderCompletedAt.toString()}`
+                                    : "No orders yet"}
+                            </span>
+                        </div>
+                        <div>
+                            <CurrencyPoundIcon />
+                            <span>
                                 Min. order £{props.restaurant.minOrderAmount}
                             </span>
                         </div>
+                    </div>
+                    <div className={styles.categories}>
+                        {getCategories().map((it) => (
+                            <h3>{it}</h3>
+                        ))}
+                    </div>
+                </div>
+                <div className={styles.container}>
+                    <div className={styles.search}>
+                        <SearchIcon height="100%" width="30px" />
+                        <input
+                            onChange={(e) => onSearch(e.target.value)}
+                            placeholder="Search items"
+                        />
+                    </div>
+                    <div className={styles.items}>
+                        {getCategories().map((it) => {
+                            const categoryItems = itemsShown.filter(
+                                (it2) =>
+                                    it2.category.toLowerCase() ===
+                                    it.toLowerCase()
+                            );
+
+                            return (
+                                <div className={styles.itemsContainer}>
+                                    <h2>{capitalise(it)}</h2>
+                                    <div>
+                                        {categoryItems
+                                            .filter((it) => it.image)
+                                            .map((item) => (
+                                                <MenuItem item={item} />
+                                            ))}
+                                    </div>
+                                    <div>
+                                        {categoryItems
+                                            .filter((it) => !it.image)
+                                            .map((item) => (
+                                                <MenuItem item={item} />
+                                            ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </main>
@@ -113,13 +186,24 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
     if (!avg) return { notFound: true };
 
+    // When was the last order completed at?
+    // Well, we sort all of the orders in desc order, and get the first one
+    const lastOrder = await prisma.order.findFirst({
+        orderBy: {
+            completedAt: "desc",
+        },
+    });
+
     return {
         props: {
             user: fullUser,
             restaurant: restaurant,
-            menu: restaurant.menu,
+            menu: restaurant.menu.sort((a, b) =>
+                a.category.localeCompare(b.category)
+            ),
             reviewCount: restaurant.reviews.length,
-            starAverage: avg._avg.rating || 4,
+            starAverage: avg._avg.rating || 0,
+            lastOrderCompletedAt: lastOrder ? lastOrder.completedAt : null,
         },
     };
 };

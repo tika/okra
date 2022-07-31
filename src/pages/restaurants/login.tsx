@@ -8,6 +8,7 @@ import { fetcher } from "../../app/fetch";
 import { GetServerSideProps } from "next";
 import { RestaurantJWT } from "../../app/restaurantjwt";
 import { useRouter } from "next/router";
+import { prisma } from "../../app/prisma";
 
 interface Props {}
 
@@ -78,12 +79,18 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     const restaurant = RestaurantJWT.parseRequest(ctx.req);
 
     if (restaurant) {
-        return {
-            redirect: {
-                destination: "/restaurants/app",
-                permanent: false,
-            },
-        };
+        const isRestaurant = await prisma.restaurant.count({
+            where: { id: restaurant.id },
+        });
+
+        if (isRestaurant) {
+            return {
+                redirect: {
+                    destination: "/restaurants/app",
+                    permanent: false,
+                },
+            };
+        }
     }
 
     return { props: {} };

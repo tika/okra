@@ -3,6 +3,7 @@ import { InvalidDataError, NotFoundError } from "../../../app/exceptions";
 import { prisma } from "../../../app/prisma";
 import { RestaurantJWT } from "../../../app/restaurantjwt";
 import { createSchema, deleteSchema } from "../../../schemas/menuschema";
+import { convertImage } from "../../../app/convertimage";
 
 export default createEndpoint({
     GET: async (req, res) => {
@@ -24,11 +25,18 @@ export default createEndpoint({
 
         if (!restaurant) throw new NotFoundError("restaurant");
 
+        // Convert the category to lower case
+        item.category = item.category.toLowerCase();
+
+        // Convert image to Cloudinary url
+        if (item.image) {
+            item.image = convertImage(item.image);
+        }
+
         const { id, ...itemWithoutId } = item;
 
         // This is what is sent to prisma as a query
         // If there is an item id, then we want to update the menu where the item.id = item.id
-        // And set this new data
         // Otherwise create a new item
         const toSendObject = item.id
             ? {

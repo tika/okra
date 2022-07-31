@@ -8,6 +8,7 @@ import { FormInput } from "../../components/FormInput";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import { RestaurantJWT } from "../../app/restaurantjwt";
+import { prisma } from "../../app/prisma";
 
 interface Props {}
 
@@ -19,6 +20,7 @@ export default function SignUp(props: DefaultProps & Props) {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [minOrderAmount, setMinOrderAmount] = useState(0);
+    const [deliveryFee, setDeliveryFee] = useState(0);
     const [address1, setAddress1] = useState("");
     const [address2, setAddress2] = useState("");
     const [city, setCity] = useState("");
@@ -44,6 +46,7 @@ export default function SignUp(props: DefaultProps & Props) {
                 address2,
                 city,
                 postcode,
+                deliveryFee: deliveryFee
             });
             await router.push("/restaurants/app");
         }
@@ -94,6 +97,13 @@ export default function SignUp(props: DefaultProps & Props) {
                         type="text"
                     />
                     <FormInput
+                        title="Description"
+                        placeholder="e.g. We serve kebab"
+                        value={description}
+                        onInput={(val) => setDescription(val)}
+                        type="text"
+                    />
+                    <FormInput
                         title="Email*"
                         placeholder="e.g. name@example.com"
                         value={email}
@@ -119,6 +129,13 @@ export default function SignUp(props: DefaultProps & Props) {
                         placeholder="e.g. £14"
                         value={minOrderAmount}
                         onInput={(val) => setMinOrderAmount(parseInt(val))}
+                        type="number"
+                    />
+                    <FormInput
+                        title="Delivery fee*"
+                        placeholder="e.g. £2"
+                        value={deliveryFee}
+                        onInput={(val) => setDeliveryFee(parseInt(val))}
                         type="number"
                     />
                     <h2 style={{ marginTop: "1em" }}>Address</h2>
@@ -161,12 +178,18 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     const restaurant = RestaurantJWT.parseRequest(ctx.req);
 
     if (restaurant) {
-        return {
-            redirect: {
-                destination: "/restaurants/app",
-                permanent: false,
-            },
-        };
+        const isRestaurant = await prisma.restaurant.count({
+            where: { id: restaurant.id },
+        });
+
+        if (isRestaurant) {
+            return {
+                redirect: {
+                    destination: "/restaurants/app",
+                    permanent: false,
+                },
+            };
+        }
     }
 
     return { props: {} };

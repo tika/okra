@@ -14,6 +14,7 @@
     height: 1.5em;
     display: flex;
     align-items: center;
+    gap: 0.5em;
 }
 
 .info > div > svg {
@@ -25,4 +26,61 @@
 .status {
     font-size: 1em;
     font-weight: var(--semibold);
+}
+
+.categories {
+    overflow-y: auto;
+    height: 100%;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+}
+
+.search > input {
+    background-color: transparent;
+    font-size: 1.5em;
+    padding: 2px 0.5em;
+    border-radius: 0;
+    font-weight: var(--regular);
+}
+
+.itemsContainer > div {
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+    max-width: calc(70vw - 4em - 5em);
+}
+
+.itemsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.main {
+    display: flex;
+    gap: 5em;
+    max-height: 100vh;
+    overflow-y: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.items {
+    display: flex;
+    flex-direction: column;
+    gap: 5em;
+    margin-top: 5em;
+    height: calc(100vh - 16em);
+    overflow-y: auto;
+}
+
+.sidebar {
+    width: 30vw;
 }

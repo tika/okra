@@ -1,6 +1,6 @@
 import { useState, FormEvent } from "react";
 import toast from "react-hot-toast";
-import { isNumber } from "../app/number";
+import { isNumber } from "../app/primitive";
 import { FormInput } from "./FormInput";
 import { toastStyle } from "../app/constants";
 import { BaseItem } from "../app/okra";
@@ -77,8 +77,8 @@ export function MenuItemEdit({ item, ...props }: Props) {
             <FormInput
                 title="Category*"
                 placeholder="e.g. Salads/Burgers/Wraps"
-                value={description}
-                onInput={(val) => setDescription(val)}
+                value={category}
+                onInput={(val) => setCategory(val)}
                 type="text"
             />
             <FormInput

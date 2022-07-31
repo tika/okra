@@ -8,6 +8,7 @@ import { fetcher } from "../../app/fetch";
 import { GetServerSideProps } from "next";
 import { UserJWT } from "../../app/userjwt";
 import { useRouter } from "next/router";
+import { prisma } from "../../app/prisma";
 
 interface Props {}
 
@@ -78,12 +79,16 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     const user = UserJWT.parseRequest(ctx.req);
 
     if (user) {
-        return {
-            redirect: {
-                destination: "/users/app",
-                permanent: false,
-            },
-        };
+        const isUser = await prisma.user.count({ where: { id: user.id } });
+
+        if (isUser) {
+            return {
+                redirect: {
+                    destination: "/users/app",
+                    permanent: false,
+                },
+            };
+        }
     }
 
     return { props: {} };
