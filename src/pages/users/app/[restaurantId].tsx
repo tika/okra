@@ -15,7 +15,8 @@ import {
     StarIcon,
 } from "@heroicons/react/outline";
 import { MenuItem } from "../../../components/MenuItem";
-import { useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
+import { AddItemModal } from "../../../components/AddItemModal";
 
 interface Props {
     user: User;
@@ -28,6 +29,10 @@ interface Props {
 
 export default function ViewRestaurant(props: Props & DefaultProps) {
     const [itemsShown, setItemsShown] = useState(props.menu);
+    const [categoryContainers, setCategoryContainers] = useState([]);
+    const [categoriesShown, setCategoriesShown] = useState(getCategories());
+    const [highlightedCategory, setHighlightedCategory] = useState(0);
+    const [cartItem, setCartItem] = useState<Item | undefined>();
 
     // Gets categories from the items shown
     function getCategories() {
@@ -35,6 +40,16 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
             new Set(itemsShown.map((it) => capitalise(it.category)))
         );
     }
+
+    // Every time getCategories updates
+    useEffect(() => {
+        // add or remove refs
+        setCategoryContainers((categoryContainers) =>
+            Array(categoriesShown.length)
+                .fill([])
+                .map((_, i) => categoryContainers[i] || createRef())
+        );
+    }, [categoriesShown]);
 
     // Matches name
     function onSearch(val: string) {
@@ -45,7 +60,11 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                 it.name.toLowerCase().includes(val.toLowerCase())
             )
         );
+
+        setCategoriesShown(getCategories());
     }
+
+    console.log(cartItem);
 
     return (
         <div className={props.main}>
@@ -60,6 +79,10 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                 </Navbar>
             </header>
             <main className={styles.main}>
+                <AddItemModal
+                    item={cartItem}
+                    close={() => setCartItem(undefined)}
+                />
                 <div className={styles.sidebar}>
                     <h1>{props.restaurant.name}</h1>
                     <div className={styles.info}>
@@ -91,8 +114,15 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                         </div>
                     </div>
                     <div className={styles.categories}>
-                        {getCategories().map((it) => (
-                            <h3>{it}</h3>
+                        {categoriesShown.map((it, i) => (
+                            <h3
+                                key={it}
+                                className={`${
+                                    highlightedCategory === i && "highlight"
+                                }`}
+                            >
+                                {it}
+                            </h3>
                         ))}
                     </div>
                 </div>
@@ -105,7 +135,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                         />
                     </div>
                     <div className={styles.items}>
-                        {getCategories().map((it) => {
+                        {categoriesShown.map((it, i) => {
                             const categoryItems = itemsShown.filter(
                                 (it2) =>
                                     it2.category.toLowerCase() ===
@@ -113,20 +143,36 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                             );
 
                             return (
-                                <div className={styles.itemsContainer}>
+                                <div
+                                    key={i}
+                                    className={styles.itemsContainer}
+                                    ref={categoryContainers[i]}
+                                >
                                     <h2>{capitalise(it)}</h2>
                                     <div>
                                         {categoryItems
                                             .filter((it) => it.image)
                                             .map((item) => (
-                                                <MenuItem item={item} />
+                                                <MenuItem
+                                                    key={item.id}
+                                                    onPlus={() =>
+                                                        setCartItem(item)
+                                                    }
+                                                    item={item}
+                                                />
                                             ))}
                                     </div>
                                     <div>
                                         {categoryItems
                                             .filter((it) => !it.image)
                                             .map((item) => (
-                                                <MenuItem item={item} />
+                                                <MenuItem
+                                                    key={item.id}
+                                                    onPlus={() =>
+                                                        setCartItem(item)
+                                                    }
+                                                    item={item}
+                                                />
                                             ))}
                                     </div>
                                 </div>

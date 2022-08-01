@@ -2081,6 +2081,11 @@ tr46@~0.0.3:
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
 
+ts-localstorage@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ts-localstorage/-/ts-localstorage-2.0.0.tgz#3835d3345e818b0730e1336f8d475d210385542b"
+  integrity sha512-fBgRbLFOrkaSUt1KsHX0nN6da7itB641vOvXg7MTZikc/fPvK6ZECuXIpRBmToaLz39k616cv9hYPCZAcB55TQ==
+
 tsconfig-paths@^3.14.1:
   version "3.14.1"
   resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.14.1.tgz#ba0734599e8ea36c862798e920bcf163277b137a"

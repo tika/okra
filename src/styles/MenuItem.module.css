@@ -1,9 +1,14 @@
 .plus {
-    width: 1em;
-    height: 1em;
     border-radius: 100%;
-    padding: 10px;
     background-color: white;
+    padding: 0.5em;
+    width: 2em;
+    height: 2em;
+}
+
+.plus > svg {
+    width: 100%;
+    height: 100%;
 }
 
 .main {

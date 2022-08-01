@@ -83,4 +83,9 @@
 
 .sidebar {
     width: 30vw;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    height: calc(100vh - 8.5em);
+    overflow-y: auto;
 }

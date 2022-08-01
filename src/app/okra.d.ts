@@ -12,3 +12,7 @@ export interface DefaultProps {
 export type BaseItem = Omit<Item, "id" | "restaurantId"> & {
     id: number | undefined;
 };
+export interface CartItem {
+    itemId: number;
+    amount: number;
+}
