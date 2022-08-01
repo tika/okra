@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { Item } from "@prisma/client";
 import Image from "next/image";
@@ -9,11 +9,38 @@ import styles from "../styles/AddItemModal.module.css";
 interface Props {
     item?: Item;
     close(): void;
-    add(amount: number): void;
+    change(amount: number): void;
+    amount: number;
 }
 
 export function AddItemModal(props: Props) {
     const [amount, setAmount] = useState(1);
+
+    useEffect(() => {
+        setAmount(props.amount === 0 ? 1 : props.amount);
+    }, [props]);
+
+    function getText() {
+        if (!props.item) return null;
+
+        // Trying to add items
+        if (amount !== 0) {
+            return `Add ${amount} to order • ${formatPrice(
+                props.item.price * amount
+            )}`;
+        }
+
+        // Can't remove because it's not already in the cart
+        if (itemNotInCart()) {
+            return "Choose an amount";
+        }
+
+        return "Remove item from cart";
+    }
+
+    function itemNotInCart() {
+        return props.amount === 0;
+    }
 
     return (
         <Dialog
@@ -48,7 +75,7 @@ export function AddItemModal(props: Props) {
                             <div className={styles.increments}>
                                 <button
                                     onClick={() =>
-                                        setAmount(amount === 1 ? 1 : amount - 1)
+                                        setAmount(amount === 0 ? 0 : amount - 1)
                                     }
                                 >
                                     <MinusIcon
@@ -69,9 +96,11 @@ export function AddItemModal(props: Props) {
                                 </button>
                             </div>
 
-                            <button onClick={() => props.add(amount)}>
-                                Add {amount} to order •{" "}
-                                {formatPrice(props.item.price * amount)}
+                            <button
+                                onClick={() => props.change(amount)}
+                                disabled={amount === 0 && itemNotInCart()}
+                            >
+                                {getText()}
                             </button>
                         </div>
                     </div>

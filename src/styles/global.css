@@ -181,3 +181,10 @@ code {
 .danger-text {
     color: var(--danger);
 }
+
+button[disabled="disabled"],
+button:disabled {
+    background-color: var(--danger);
+    opacity: 80%;
+    cursor: not-allowed;
+}

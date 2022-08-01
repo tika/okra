@@ -7,9 +7,10 @@ import styles from "../styles/MenuItem.module.css";
 interface Props {
     item: Item;
     onPlus(): void;
+    amount: number;
 }
 
-export function MenuItem({ item, onPlus }: Props) {
+export function MenuItem({ item, onPlus, amount }: Props) {
     return (
         <div className={`${styles.main} ${item.image && styles.mainImg}`}>
             {item.image && (
@@ -25,12 +26,16 @@ export function MenuItem({ item, onPlus }: Props) {
                 className={`${styles.plus} ${item.image && styles.plusImg}`}
                 onClick={onPlus}
             >
-                <PlusIcon
-                    width="100%"
-                    height="100%"
-                    stroke="black"
-                    strokeWidth="3"
-                />
+                {amount === 0 ? (
+                    <PlusIcon
+                        width="100%"
+                        height="100%"
+                        stroke="black"
+                        strokeWidth="3"
+                    />
+                ) : (
+                    amount
+                )}
             </button>
         </div>
     );

@@ -1,7 +1,7 @@
 import { Item, Restaurant, User } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { UserJWT } from "../../../app/userjwt";
-import { DefaultProps } from "../../../app/okra";
+import { CartItem, DefaultProps } from "../../../app/okra";
 import { Navbar } from "../../../components/Navbar";
 import { prisma } from "../../../app/prisma";
 import { DisplayUser } from "../../../components/DisplayUser";
@@ -17,7 +17,7 @@ import {
 import { MenuItem } from "../../../components/MenuItem";
 import { createRef, useEffect, useRef, useState } from "react";
 import { AddItemModal } from "../../../components/AddItemModal";
-import { addToCart } from "../../../app/cart";
+import { addToCart, getCartItems, removeFromCart } from "../../../app/cart";
 import toast from "react-hot-toast";
 
 interface Props {
@@ -34,7 +34,13 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
     const [categoryContainers, setCategoryContainers] = useState([]);
     const [categoriesShown, setCategoriesShown] = useState(getCategories());
     const [highlightedCategory, setHighlightedCategory] = useState(0);
-    const [cartItem, setCartItem] = useState<Item | undefined>();
+    const [cartItem, setCartItem] = useState<Item | undefined>(); // TODO: better name
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+    // This is silly, but because of a Hydration warning, we must first wait for the entire window to mount before using localstorage.
+    useEffect(() => {
+        setCartItems(getCartItems());
+    }, []);
 
     // Gets categories from the items shown
     function getCategories() {
@@ -66,16 +72,24 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
         setCategoriesShown(getCategories());
     }
 
-    function addItem(amount: number) {
+    function itemChange(amount: number) {
         // Something's gone wrong
         if (!cartItem) return;
 
-        addToCart(cartItem, amount);
+        // Then we want to remove item from
+        if (amount === 0) {
+            removeFromCart(cartItem.id);
 
-        // Close this window, and update UI
-        toast(`Added ${cartItem.name} to cart!`);
+            // Close this window, and update UI
+            toast(`Removed ${cartItem.name} from cart`);
+        } else {
+            addToCart(cartItem, amount);
+
+            toast(`Added ${cartItem.name} to cart`);
+        }
 
         setCartItem(undefined);
+        setCartItems(getCartItems());
     }
 
     return (
@@ -85,7 +99,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                 <Navbar>
                     <a className={styles.cart}>
                         <ShoppingCartIcon width="1.5em" height="100%" />
-                        <span>Cart • 0</span>
+                        <span>Cart • {cartItems.length}</span>
                     </a>
                     <DisplayUser user={props.user} />
                 </Navbar>
@@ -93,8 +107,12 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
             <main className={styles.main}>
                 <AddItemModal
                     item={cartItem}
+                    amount={
+                        cartItems.find((it) => it.itemId === cartItem?.id)
+                            ?.amount ?? 0
+                    }
                     close={() => setCartItem(undefined)}
-                    add={addItem}
+                    change={itemChange}
                 />
                 <div className={styles.sidebar}>
                     <h1>{props.restaurant.name}</h1>
@@ -172,6 +190,13 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                                                         setCartItem(item)
                                                     }
                                                     item={item}
+                                                    amount={
+                                                        cartItems.find(
+                                                            (it) =>
+                                                                it.itemId ==
+                                                                item.id
+                                                        )?.amount || 0
+                                                    }
                                                 />
                                             ))}
                                     </div>
@@ -185,6 +210,13 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                                                         setCartItem(item)
                                                     }
                                                     item={item}
+                                                    amount={
+                                                        cartItems.find(
+                                                            (it) =>
+                                                                it.itemId ==
+                                                                item.id
+                                                        )?.amount || 0
+                                                    }
                                                 />
                                             ))}
                                     </div>

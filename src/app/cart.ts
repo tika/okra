@@ -6,7 +6,15 @@ const cartKey = new LocalKey<CartItem[]>("cart", []);
 
 // Returns the items in the cart
 export function getCartItems() {
-    return LocalStorage.getItem(cartKey);
+    if (typeof window === "undefined") return [];
+
+    const items = LocalStorage.getItem(cartKey);
+
+    if (!items) {
+        LocalStorage.setItem(cartKey, []);
+    }
+
+    return items || [];
 }
 
 // Adds an item to the cart
@@ -45,11 +53,19 @@ function clean(x: CartItem[]) {
             y.push(elem);
         } else {
             // Otherwise find the amount
-            match[0].amount += elem.amount;
+            match[0].amount = elem.amount;
         }
     }
 
     return y;
+}
+
+// Removes item(s) from cart
+export function removeFromCart(itemId: number) {
+    LocalStorage.setItem(
+        cartKey,
+        getCartItems().filter((it) => it.itemId !== itemId)
+    );
 }
 
 export function setCart(items: CartItem[]) {
