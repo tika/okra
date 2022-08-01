@@ -17,6 +17,8 @@ import {
 import { MenuItem } from "../../../components/MenuItem";
 import { createRef, useEffect, useRef, useState } from "react";
 import { AddItemModal } from "../../../components/AddItemModal";
+import { addToCart } from "../../../app/cart";
+import toast from "react-hot-toast";
 
 interface Props {
     user: User;
@@ -64,7 +66,17 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
         setCategoriesShown(getCategories());
     }
 
-    console.log(cartItem);
+    function addItem(amount: number) {
+        // Something's gone wrong
+        if (!cartItem) return;
+
+        addToCart(cartItem, amount);
+
+        // Close this window, and update UI
+        toast(`Added ${cartItem.name} to cart!`);
+
+        setCartItem(undefined);
+    }
 
     return (
         <div className={props.main}>
@@ -82,6 +94,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                 <AddItemModal
                     item={cartItem}
                     close={() => setCartItem(undefined)}
+                    add={addItem}
                 />
                 <div className={styles.sidebar}>
                     <h1>{props.restaurant.name}</h1>

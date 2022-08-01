@@ -9,6 +9,7 @@ import styles from "../styles/AddItemModal.module.css";
 interface Props {
     item?: Item;
     close(): void;
+    add(amount: number): void;
 }
 
 export function AddItemModal(props: Props) {
@@ -68,7 +69,7 @@ export function AddItemModal(props: Props) {
                                 </button>
                             </div>
 
-                            <button onClick={() => null}>
+                            <button onClick={() => props.add(amount)}>
                                 Add {amount} to order •{" "}
                                 {formatPrice(props.item.price * amount)}
                             </button>
