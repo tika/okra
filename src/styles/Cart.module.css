@@ -1,0 +1,140 @@
+.info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+}
+
+.info > div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.info > div > svg {
+    height: 2em;
+    width: 2em;
+    stroke: var(--okra-green);
+}
+
+.minOrder > div > span {
+    color: var(--danger);
+    font-size: 1em;
+}
+
+.minOrder > div > svg {
+    stroke: var(--danger);
+    width: 1.5em;
+    height: 100%;
+}
+
+.minOrder > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.minOrder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2em 0;
+}
+
+.orderNote {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px;
+    padding: 1em;
+    cursor: pointer;
+}
+
+.orderNote:hover {
+    opacity: 80%;
+}
+
+.orderNote > div > h2,
+.orderNote > div > h3 {
+    color: black;
+    font-weight: var(--regular);
+    font-size: 1em;
+}
+
+.orderNote > div > h2 {
+    font-weight: var(--medium);
+}
+
+.orderNote > svg {
+    width: 1.5em;
+    height: 1.5em;
+    stroke: black;
+}
+
+.return > svg {
+    width: 2em;
+    height: 2em;
+}
+
+.return > span {
+    font-size: 1.5em;
+}
+
+.return {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    cursor: pointer;
+}
+
+.main {
+    display: flex;
+    height: calc(100vh - 8.5em);
+    justify-content: center;
+}
+
+.main > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 40vw;
+    max-width: 80vw;
+}
+
+.top {
+    margin: 2em 0;
+    text-align: center;
+}
+
+.items {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    overflow-y: auto;
+    padding-right: 1em;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.item > h1 {
+    font-size: 1.5em;
+    font-weight: var(--medium);
+}
+
+.input > input {
+    width: calc(100% - 2em);
+}
+
+.bottom {
+    background-color: var(--dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em 0;
+}

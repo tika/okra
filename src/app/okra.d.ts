@@ -16,3 +16,5 @@ export interface CartItem {
     itemId: number;
     amount: number;
 }
+
+export type CheckoutCartItem = Item & { amount: number };

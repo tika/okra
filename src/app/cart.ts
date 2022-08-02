@@ -2,72 +2,78 @@ import { Item } from "@prisma/client";
 import { LocalKey, LocalStorage } from "ts-localstorage";
 import { CartItem } from "./okra";
 
-const cartKey = new LocalKey<CartItem[]>("cart", []);
+export class Cart {
+    private readonly cartKey;
 
-// Returns the items in the cart
-export function getCartItems() {
-    if (typeof window === "undefined") return [];
-
-    const items = LocalStorage.getItem(cartKey);
-
-    if (!items) {
-        LocalStorage.setItem(cartKey, []);
+    constructor(restaurantId: number) {
+        this.cartKey = new LocalKey<CartItem[]>(`cart-${restaurantId}`, []);
     }
 
-    return items || [];
-}
+    // Returns the items in the cart
+    public get() {
+        if (typeof window === "undefined") return [];
 
-// Adds an item to the cart
-// Returns the new items in the cart
-export function addToCart(item: Item, amount: number) {
-    let items = getCartItems();
+        const items = LocalStorage.getItem(this.cartKey);
 
-    // If there aren't already items, lets set that key equal to a blank array
-    if (!items) {
-        LocalStorage.setItem(cartKey, []);
-        items = [];
-    }
-
-    items.push({
-        itemId: item.id,
-        amount,
-    });
-
-    // Compact duplicate ids
-    LocalStorage.setItem(cartKey, clean(items));
-
-    return items;
-}
-
-// Cleans up where we have duplicate ids
-// Returns a new array
-function clean(x: CartItem[]) {
-    const y: CartItem[] = [];
-
-    for (let i = 0; i < x.length; i++) {
-        const elem = x[i];
-        const match = y.filter((it) => it.itemId === elem.itemId);
-
-        // If y doesn't include this itemId, then add
-        if (match.length === 0) {
-            y.push(elem);
-        } else {
-            // Otherwise find the amount
-            match[0].amount = elem.amount;
+        if (!items) {
+            LocalStorage.setItem(this.cartKey, []);
         }
+
+        return items || [];
     }
 
-    return y;
-}
+    public set(items: CartItem[]) {
+        LocalStorage.setItem(this.cartKey, items);
+    }
 
-// Removes item(s) from cart
-export function removeFromCart(itemId: number) {
-    LocalStorage.setItem(
-        cartKey,
-        getCartItems().filter((it) => it.itemId !== itemId)
-    );
-}
+    // Cleans up where we have duplicate ids
+    // Returns a new array
+    private clean(x: CartItem[]) {
+        const y: CartItem[] = [];
 
-export function setCart(items: CartItem[]) {
-    LocalStorage.setItem(cartKey, items);
+        for (let i = 0; i < x.length; i++) {
+            const elem = x[i];
+            const match = y.filter((it) => it.itemId === elem.itemId);
+
+            // If y doesn't include this itemId, then add
+            if (match.length === 0) {
+                y.push(elem);
+            } else {
+                // Otherwise find the amount
+                match[0].amount = elem.amount;
+            }
+        }
+
+        return y;
+    }
+
+    // Adds an item to the cart
+    // Returns the new items in the cart
+    public add(item: Item, amount: number) {
+        let items = this.get();
+
+        // If there aren't already items, lets set that key equal to a blank array
+        if (!items) {
+            LocalStorage.setItem(this.cartKey, []);
+            items = [];
+        }
+
+        items.push({
+            itemId: item.id,
+            amount,
+        });
+
+        // Compact duplicate ids
+        LocalStorage.setItem(this.cartKey, this.clean(items));
+
+        return items;
+    }
+
+    // Removes item(s) from cart
+    public remove(itemId: number) {
+        LocalStorage.setItem(
+            this.cartKey,
+            this.get().filter((it) => it.itemId !== itemId)
+        );
+    }
 }

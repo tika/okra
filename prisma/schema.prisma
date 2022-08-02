@@ -65,6 +65,7 @@ model Order {
   restaurant Restaurant @relation(references: [id], fields: [restaurantId])
   restaurantId Int
   total Float
+  note String
 }
 
 model Review {

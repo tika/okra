@@ -1,12 +1,12 @@
 import { Item, Restaurant, User } from "@prisma/client";
 import { GetServerSideProps } from "next";
-import { UserJWT } from "../../../app/userjwt";
-import { CartItem, DefaultProps } from "../../../app/okra";
-import { Navbar } from "../../../components/Navbar";
-import { prisma } from "../../../app/prisma";
-import { DisplayUser } from "../../../components/DisplayUser";
-import styles from "../../../styles/ViewRestaurant.module.css";
-import { isNumber, capitalise } from "../../../app/primitive";
+import { UserJWT } from "../../../../app/userjwt";
+import { CartItem, DefaultProps } from "../../../../app/okra";
+import { Navbar } from "../../../../components/Navbar";
+import { prisma } from "../../../../app/prisma";
+import { DisplayUser } from "../../../../components/DisplayUser";
+import styles from "../../../../styles/ViewRestaurant.module.css";
+import { isNumber, capitalise } from "../../../../app/primitive";
 import {
     CurrencyPoundIcon,
     LocationMarkerIcon,
@@ -14,10 +14,10 @@ import {
     ShoppingCartIcon,
     StarIcon,
 } from "@heroicons/react/outline";
-import { MenuItem } from "../../../components/MenuItem";
+import { MenuItem } from "../../../../components/MenuItem";
 import { createRef, useEffect, useRef, useState } from "react";
-import { AddItemModal } from "../../../components/AddItemModal";
-import { addToCart, getCartItems, removeFromCart } from "../../../app/cart";
+import { AddItemModal } from "../../../../components/AddItemModal";
+import { Cart } from "../../../../app/cart";
 import toast from "react-hot-toast";
 
 interface Props {
@@ -35,11 +35,11 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
     const [categoriesShown, setCategoriesShown] = useState(getCategories());
     const [highlightedCategory, setHighlightedCategory] = useState(0);
     const [cartItem, setCartItem] = useState<Item | undefined>(); // TODO: better name
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [cart, setCart] = useState<Cart>();
 
     // This is silly, but because of a Hydration warning, we must first wait for the entire window to mount before using localstorage.
     useEffect(() => {
-        setCartItems(getCartItems());
+        setCart(new Cart(props.restaurant.id));
     }, []);
 
     // Gets categories from the items shown
@@ -74,22 +74,21 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
 
     function itemChange(amount: number) {
         // Something's gone wrong
-        if (!cartItem) return;
+        if (!cartItem || !cart) return;
 
         // Then we want to remove item from
         if (amount === 0) {
-            removeFromCart(cartItem.id);
+            cart.remove(cartItem.id);
 
             // Close this window, and update UI
             toast(`Removed ${cartItem.name} from cart`);
         } else {
-            addToCart(cartItem, amount);
+            cart.add(cartItem, amount);
 
             toast(`Added ${cartItem.name} to cart`);
         }
 
         setCartItem(undefined);
-        setCartItems(getCartItems());
     }
 
     return (
@@ -97,9 +96,12 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
             <header>
                 <title>{props.restaurant.name}</title>
                 <Navbar>
-                    <a className={styles.cart}>
+                    <a
+                        className={styles.cart}
+                        href={`/users/app/${props.restaurant.id}/cart`}
+                    >
                         <ShoppingCartIcon width="1.5em" height="100%" />
-                        <span>Cart • {cartItems.length}</span>
+                        <span>Cart • {cart?.get().length ?? 0}</span>
                     </a>
                     <DisplayUser user={props.user} />
                 </Navbar>
@@ -108,7 +110,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                 <AddItemModal
                     item={cartItem}
                     amount={
-                        cartItems.find((it) => it.itemId === cartItem?.id)
+                        cart?.get().find((it) => it.itemId === cartItem?.id)
                             ?.amount ?? 0
                     }
                     close={() => setCartItem(undefined)}
@@ -191,11 +193,13 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                                                     }
                                                     item={item}
                                                     amount={
-                                                        cartItems.find(
-                                                            (it) =>
-                                                                it.itemId ==
-                                                                item.id
-                                                        )?.amount || 0
+                                                        cart
+                                                            ?.get()
+                                                            .find(
+                                                                (it) =>
+                                                                    it.itemId ==
+                                                                    item.id
+                                                            )?.amount || 0
                                                     }
                                                 />
                                             ))}
@@ -211,11 +215,13 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                                                     }
                                                     item={item}
                                                     amount={
-                                                        cartItems.find(
-                                                            (it) =>
-                                                                it.itemId ==
-                                                                item.id
-                                                        )?.amount || 0
+                                                        cart
+                                                            ?.get()
+                                                            .find(
+                                                                (it) =>
+                                                                    it.itemId ==
+                                                                    item.id
+                                                            )?.amount || 0
                                                     }
                                                 />
                                             ))}
