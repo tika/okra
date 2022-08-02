@@ -5,8 +5,18 @@ import CardSection from "./CardSection";
 import { stripeTokenHandler } from "../app/stripe";
 import toast from "react-hot-toast";
 import { toastStyle } from "../app/constants";
+import { CartItem } from "../app/okra";
+import { formatPrice } from "../app/primitive";
 
-export default function CheckoutForm() {
+interface Props {
+    restaurantId: number;
+    userId: number;
+    note?: string;
+    items: CartItem[];
+    total: number;
+}
+
+export default function CheckoutForm(props: Props) {
     const stripe = useStripe();
     const elements = useElements();
 
@@ -29,8 +39,6 @@ export default function CheckoutForm() {
 
         const result = await stripe.createToken(card);
 
-        console.log("HELLO");
-
         if (result.error) {
             // Show error to your customer.
             toast.error(result.error.message || "Something went wrong", {
@@ -38,13 +46,20 @@ export default function CheckoutForm() {
             });
         } else {
             // Send the token to your server.
-            stripeTokenHandler(result.token);
+            stripeTokenHandler(
+                result.token,
+                props.restaurantId,
+                props.note,
+                props.userId,
+                props.items
+            );
         }
     }
 
     return (
         <form onSubmit={handleSubmit}>
             <CardSection />
+            <span>{formatPrice(props.total)}</span>
             <button disabled={!stripe}>Confirm order</button>
         </form>
     );

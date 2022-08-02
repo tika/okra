@@ -1,11 +1,12 @@
 import React from "react";
 import { CardElement } from "@stripe/react-stripe-js";
+import { StripeCardElementOptions } from "@stripe/stripe-js";
 
-const CARD_ELEMENT_OPTIONS = {
+const CARD_ELEMENT_OPTIONS: StripeCardElementOptions = {
     style: {
         base: {
-            color: "#32325d",
-            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            color: "white",
+            fontFamily: '"Readex Pro", sans-serif',
             fontSmoothing: "antialiased",
             fontSize: "16px",
             "::placeholder": {

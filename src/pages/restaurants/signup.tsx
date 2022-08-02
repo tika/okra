@@ -25,6 +25,8 @@ export default function SignUp(props: DefaultProps & Props) {
     const [address2, setAddress2] = useState("");
     const [city, setCity] = useState("");
     const [postcode, setPostcode] = useState("");
+    const [stripePublic, setStripePublic] = useState("");
+    const [stripePrivate, setStripePrivate] = useState("");
 
     const router = useRouter();
 
@@ -46,7 +48,9 @@ export default function SignUp(props: DefaultProps & Props) {
                 address2,
                 city,
                 postcode,
-                deliveryFee: deliveryFee
+                stripePublicKey: stripePublic,
+                stripeSecretKey: stripePrivate,
+                deliveryFee: deliveryFee,
             });
             await router.push("/restaurants/app");
         }
@@ -128,15 +132,30 @@ export default function SignUp(props: DefaultProps & Props) {
                         title="Minimum Order Amount*"
                         placeholder="e.g. £14"
                         value={minOrderAmount}
-                        onInput={(val) => setMinOrderAmount(parseInt(val))}
+                        onInput={(val) => setMinOrderAmount(parseFloat(val))}
                         type="number"
                     />
                     <FormInput
                         title="Delivery fee*"
                         placeholder="e.g. £2"
                         value={deliveryFee}
-                        onInput={(val) => setDeliveryFee(parseInt(val))}
+                        onInput={(val) => setDeliveryFee(parseFloat(val))}
                         type="number"
+                    />
+                    <h2 style={{ marginTop: "1em" }}>Payments</h2>
+                    <FormInput
+                        title="Stripe Public Key*"
+                        placeholder="pk_xxxx_xxxx"
+                        value={stripePublic}
+                        onInput={(val) => setStripePublic(val)}
+                        type="text"
+                    />
+                    <FormInput
+                        title="Stripe Secret Key*"
+                        placeholder="sk_xxxx_xxxx"
+                        value={stripePrivate}
+                        onInput={(val) => setStripePrivate(val)}
+                        type="text"
                     />
                     <h2 style={{ marginTop: "1em" }}>Address</h2>
                     <FormInput

@@ -15,6 +15,8 @@ export const registerSchema = z.object({
     address2: z.string().optional(),
     city: z.string(),
     postcode: z.string(),
+    stripeSecretKey: z.string(),
+    stripePublicKey: z.string(),
 });
 
 export const loginSchema = z.object({

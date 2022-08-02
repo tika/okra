@@ -38,6 +38,8 @@ model Restaurant {
   address2 String?
   city String
   postcode String
+  stripeSecretKey String // Handling payments
+  stripePublicKey String
   menu Item[]
   orders Order[] // Orders placed on this restaurant
   reviews Review[]
