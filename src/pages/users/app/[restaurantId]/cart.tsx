@@ -17,6 +17,7 @@ import {
 } from "@heroicons/react/outline";
 import styles from "../../../../styles/Cart.module.css";
 import { FormInput } from "../../../../components/FormInput";
+import { useRouter } from "next/router";
 
 interface Props {
     user: User;
@@ -29,6 +30,8 @@ export default function CartPage(props: Props & DefaultProps) {
     const [items, setItems] = useState<CheckoutCartItem[]>([]);
     const [total, setTotal] = useState(0);
     const [note, setNote] = useState<string | null>(null);
+
+    const router = useRouter();
 
     // Set cart
     useEffect(() => {
@@ -144,6 +147,11 @@ export default function CartPage(props: Props & DefaultProps) {
                         )}
 
                         <button
+                            onClick={() =>
+                                router.push(
+                                    `/users/app/${props.restaurant.id}/checkout`
+                                )
+                            }
                             disabled={total < props.restaurant.minOrderAmount}
                         >
                             Go to checkout • {formatPrice(total)}

@@ -38,19 +38,54 @@ export default createEndpoint({
             total += items[i].price * match.amount;
         }
 
-        // todo: deal with errors
         const charge = await stripe.charges.create({
             amount: total * 100, // todo: calculate amount
             currency: "gbp",
-            description: "Example charge",
+            description: `Items: ${data.items
+                .map((it) => it.itemId)
+                .join(", ")}`,
             source: data.token,
         });
 
-        // TODO create order
-        console.log(`${data.userId} made a purchase for ${formatPrice(total)}`);
+        // Multiply the number of items in the array
+        // I know this is bad, but uh well.
+        const arr = [];
+
+        for (let i = 0; i < data.items.length; i++) {
+            for (let j = 0; j < data.items[i].amount; j++) {
+                arr.push({ id: data.items[i].itemId });
+            }
+        }
+
+        console.log(arr);
+
+        const order = await prisma.order.create({
+            data: {
+                note: data.note ?? "",
+                items: {
+                    connect: arr,
+                },
+                userId: data.userId,
+                restaurantId: data.restaurantId,
+            },
+            include: {
+                items: true,
+            },
+        });
+
+        console.log(order.items);
+
+        console.log(
+            `${data.userId} made a purchase for ${formatPrice(total)}, id: ${
+                order.id
+            }`
+        );
 
         res.send({
-            message: `Successfully made order for ${formatPrice(total)}`,
+            message: `Successfully made order for ${formatPrice(
+                total
+            )}, reference ${order.id}`,
+            id: order.id,
         });
     },
 });

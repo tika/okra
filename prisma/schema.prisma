@@ -54,7 +54,7 @@ model Item {
   category String
   restaurant Restaurant @relation(references: [id], fields: [restaurantId])
   restaurantId Int
-  orders Order[]
+  orderItems OrderItem[]
 }
 
 model Order {
@@ -63,11 +63,19 @@ model Order {
   completedAt DateTime? // when the order has been completed
   user User @relation(references: [id], fields: [userId])
   userId Int
-  items Item[]
+  items OrderItem[]
   restaurant Restaurant @relation(references: [id], fields: [restaurantId])
   restaurantId Int
-  total Float
   note String
+}
+
+model OrderItem {
+  id String @id @default(cuid())
+  quantity Int? // How many items
+  item Item @relation(references: [id], fields: [itemId])
+  itemId Int
+  order Order @relation(references: [id], fields: [orderId])
+  orderId String
 }
 
 model Review {

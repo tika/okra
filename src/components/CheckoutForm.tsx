@@ -1,6 +1,6 @@
 import React, { FormEvent } from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
-
+import styles from "../styles/CheckoutForm.module.css";
 import CardSection from "./CardSection";
 import { stripeTokenHandler } from "../app/stripe";
 import toast from "react-hot-toast";
@@ -57,10 +57,12 @@ export default function CheckoutForm(props: Props) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={styles.main}>
             <CardSection />
-            <span>{formatPrice(props.total)}</span>
-            <button disabled={!stripe}>Confirm order</button>
+            <div className={styles.action}>
+                <span>Your total today is {formatPrice(props.total)}</span>
+                <button disabled={!stripe}>Pay</button>
+            </div>
         </form>
     );
 }

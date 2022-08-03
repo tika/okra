@@ -6,9 +6,9 @@ const CARD_ELEMENT_OPTIONS: StripeCardElementOptions = {
     style: {
         base: {
             color: "white",
-            fontFamily: '"Readex Pro", sans-serif',
+            fontFamily: "monospace",
             fontSmoothing: "antialiased",
-            fontSize: "16px",
+            fontSize: "18px",
             "::placeholder": {
                 color: "#aab7c4",
             },
@@ -18,14 +18,10 @@ const CARD_ELEMENT_OPTIONS: StripeCardElementOptions = {
             iconColor: "#fa755a",
         },
     },
+    hidePostalCode: true,
 };
 
 // Straight from https://stripe.com/docs/payments/accept-a-payment-charges?platform=web#add-and-configure-a-component
 export default function CardSection() {
-    return (
-        <label>
-            Card details
-            <CardElement options={CARD_ELEMENT_OPTIONS} />
-        </label>
-    );
+    return <CardElement options={CARD_ELEMENT_OPTIONS} />;
 }

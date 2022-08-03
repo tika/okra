@@ -11,6 +11,7 @@ import { prisma } from "../../../../app/prisma";
 import { isNumber } from "../../../../app/primitive";
 import { Cart } from "../../../../app/cart";
 import { useEffect, useState } from "react";
+import styles from "../../../../styles/Checkout.module.css";
 
 interface Props {
     user: User;
@@ -50,18 +51,25 @@ export default function Checkout(props: DefaultProps & Props) {
                     <DisplayUser user={props.user} />
                 </Navbar>
             </header>
-            <main>
-                {cart && (
-                    <Elements stripe={stripePromise}>
-                        <CheckoutForm
-                            note={props.note}
-                            userId={props.user.id}
-                            restaurantId={props.restaurant.id}
-                            items={cart.get()}
-                            total={total}
-                        />
-                    </Elements>
-                )}
+            <main className={styles.main}>
+                <div>
+                    <h1>Checkout</h1>
+                    <h2>
+                        Secured using Stripe, make your payment for your order
+                        now.
+                    </h2>
+                    {cart && (
+                        <Elements stripe={stripePromise}>
+                            <CheckoutForm
+                                note={props.note}
+                                userId={props.user.id}
+                                restaurantId={props.restaurant.id}
+                                items={cart.get()}
+                                total={total}
+                            />
+                        </Elements>
+                    )}
+                </div>
             </main>
         </div>
     );
