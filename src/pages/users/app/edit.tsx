@@ -110,6 +110,12 @@ export default function Edit({ user, main }: Props & DefaultProps) {
                             <h1>Edit Profile</h1>
                             <button type="submit">Update</button>
                         </div>
+                        <a
+                            className="highlight"
+                            href={`/users/app/view/${user.id}`}
+                        >
+                            View profile
+                        </a>
                         <div className={styles.inputs}>
                             <FormInput
                                 title={`Username (currently ${user.name})`}

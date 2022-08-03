@@ -1,0 +1,23 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.image {
+    position: relative;
+    width: 2.5em;
+    height: 2.5em;
+    overflow: hidden;
+    border-radius: 100%;
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer > span {
+    font-weight: var(--regular);
+}

@@ -4,11 +4,12 @@ import styles from "../styles/Display.module.css";
 
 interface Props {
     user: User;
+    disabled?: boolean;
 }
 
 export function DisplayUser(props: Props) {
-    return (
-        <a className={styles.main} href="/users/app/edit">
+    const inner = (
+        <>
             <Avatar
                 size="2.5em"
                 name={props.user.name}
@@ -21,6 +22,18 @@ export function DisplayUser(props: Props) {
                 ]}
             />
             <span>{props.user.name}</span>
-        </a>
+        </>
+    );
+
+    return (
+        <>
+            {props.disabled ? (
+                <div className={styles.main}>{inner}</div>
+            ) : (
+                <a className={styles.main} href={"/users/app/edit"}>
+                    {inner}
+                </a>
+            )}
+        </>
     );
 }

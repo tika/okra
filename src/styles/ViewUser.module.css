@@ -1,0 +1,14 @@
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5em;
+}
+
+.main > div {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    min-width: 40vw;
+    max-width: 50vw;
+}

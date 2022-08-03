@@ -5,7 +5,10 @@ export type AbstractUser = Omit<
     User,
     "email" | "password" | "address1" | "address2" | "city" | "postcode"
 >;
-export type AbstractRestaurant = Omit<Restaurant, "email" | "password">;
+export type AbstractRestaurant = Omit<
+    Restaurant,
+    "email" | "password" | "stripePublicKey" | "stripeSecretKey"
+>;
 
 export function sanitiseUser(user: User[]): AbstractUser[];
 export function sanitiseUser(user: User): AbstractUser;
@@ -37,11 +40,18 @@ export function sanitiseRestaurant(restaurant: Restaurant): AbstractRestaurant;
 export function sanitiseRestaurant(restaurant: Restaurant | Restaurant[]) {
     if (Array.isArray(restaurant)) {
         return restaurant.map((u) => {
-            const { email, password, ...useful } = u;
+            const {
+                email,
+                password,
+                stripePublicKey,
+                stripeSecretKey,
+                ...useful
+            } = u;
             return useful;
         });
     }
 
-    const { email, password, ...useful } = restaurant;
+    const { email, password, stripePublicKey, stripeSecretKey, ...useful } =
+        restaurant;
     return useful;
 }

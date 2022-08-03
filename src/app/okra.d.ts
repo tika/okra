@@ -1,4 +1,4 @@
-import { Item } from "@prisma/client";
+import { Item, Review } from "@prisma/client";
 
 export interface SVGProps {
     height: string | number;
@@ -22,4 +22,9 @@ export type CheckoutCartItem = Item & { quantity: number };
 export type Feedback = {
     starCount: number;
     text: string;
+};
+
+export type ReviewWithRestaurant = Review & {
+    restaurantName: string;
+    restaurantLogo: string;
 };

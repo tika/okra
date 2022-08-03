@@ -17,3 +17,7 @@ export function formatPrice(price: number) {
 
     return formatter.format(price);
 }
+
+export function convertDate(date: Date) {
+    return `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
+}
