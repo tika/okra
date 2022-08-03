@@ -188,3 +188,13 @@ button:disabled {
     opacity: 80%;
     cursor: not-allowed;
 }
+
+textarea {
+    background-color: var(--charcoal);
+    border: none;
+    resize: none;
+    width: 100%;
+    padding: 1em;
+    font-size: 1em;
+    border-radius: 0.2em;
+}

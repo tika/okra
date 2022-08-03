@@ -1,0 +1,22 @@
+.bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2em;
+    margin-top: 1em;
+}
+
+.bottom > textarea {
+    height: 5em;
+}
+
+.stars {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin-top: 5px;
+}
+
+.stars > span {
+    font-size: 1em;
+}

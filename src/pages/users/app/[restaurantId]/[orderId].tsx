@@ -19,7 +19,7 @@ interface Props {
     note: string;
 }
 
-export default function ViewOrder(props: Props & DefaultProps) {
+export default function FinishOrder(props: Props & DefaultProps) {
     function submitFeedback(val: Feedback) {
         toast.promise(
             fetcher("POST", `/restaurants/reviews`, {
@@ -43,21 +43,27 @@ export default function ViewOrder(props: Props & DefaultProps) {
                 </Navbar>
             </header>
             <div className={styles.main}>
-                <h1 className="highlight">Thank you for your order!</h1>
-                <h2>
-                    Your order is being prepared, please email{" "}
-                    {props.restaurant.email} if you have an problems
-                </h2>
-                <h2>Your order summary ({props.itemCount})</h2>
                 <div>
-                    {props.items.map((it) => (
-                        <div key={it.id}>
-                            {it.quantity}x {it.name}
-                        </div>
-                    ))}
+                    <h1 className="highlight">Thank you for your order!</h1>
+                    <h2>
+                        Your order is being prepared, please email{" "}
+                        {props.restaurant.email} if you have an problems
+                    </h2>
+                    <h2 className={styles.summary}>
+                        Your order summary ({props.itemCount})
+                    </h2>
+                    <div className={styles.items}>
+                        {props.items.map((it) => (
+                            <div key={it.id}>
+                                {it.quantity}x {it.name}
+                            </div>
+                        ))}
+                    </div>
+                    {props.note && (
+                        <p className={styles.note}>Your note to the restaurant: {props.note}</p>
+                    )}
+                    <FeedbackForm onSubmit={submitFeedback} />
                 </div>
-                {props.note && <p>Your note to the restaurant: {props.note}</p>}
-                <FeedbackForm onSubmit={submitFeedback} />
             </div>
         </div>
     );
