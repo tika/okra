@@ -1,4 +1,4 @@
-import { DefaultProps, CheckoutCartItem } from "../../../../app/okra";
+import { DefaultProps, CheckoutCartItem, Feedback } from "../../../../app/okra";
 import { Navbar } from "../../../../components/Navbar";
 import { GetServerSideProps } from "next";
 import { isNumber } from "../../../../app/primitive";
@@ -7,15 +7,34 @@ import { UserJWT } from "../../../../app/userjwt";
 import { Restaurant, User } from "@prisma/client";
 import { DisplayUser } from "../../../../components/DisplayUser";
 import styles from "../../../../styles/FinishOrder.module.css";
+import FeedbackForm from "../../../../components/FeedbackForm";
+import { fetcher } from "../../../../app/fetch";
+import toast from "react-hot-toast";
 
 interface Props {
     user: User;
     restaurant: Restaurant;
     items: CheckoutCartItem[];
     itemCount: number;
+    note: string;
 }
 
-export default function CartPage(props: Props & DefaultProps) {
+export default function ViewOrder(props: Props & DefaultProps) {
+    function submitFeedback(val: Feedback) {
+        toast.promise(
+            fetcher("POST", `/restaurants/reviews`, {
+                description: val.text,
+                rating: val.starCount,
+                restaurantId: props.restaurant.id,
+            }),
+            {
+                loading: "Submitting feedback",
+                success: "Sent your feedback!",
+                error: (e) => e.message || "Something went wrong!",
+            }
+        );
+    }
+
     return (
         <div className={props.main}>
             <header>
@@ -33,10 +52,12 @@ export default function CartPage(props: Props & DefaultProps) {
                 <div>
                     {props.items.map((it) => (
                         <div key={it.id}>
-                            {it.amount}x {it.name}
+                            {it.quantity}x {it.name}
                         </div>
                     ))}
                 </div>
+                {props.note && <p>Your note to the restaurant: {props.note}</p>}
+                <FeedbackForm onSubmit={submitFeedback} />
             </div>
         </div>
     );
@@ -70,6 +91,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
     const restaurant = await prisma.restaurant.findFirst({
         where: { id: Number(ctx.params.restaurantId) },
+        include: {
+            menu: true,
+        },
     });
 
     if (!restaurant) return { notFound: true };
@@ -83,28 +107,19 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
     if (!order) return { notFound: true };
 
-    // Collect items
-    const items: CheckoutCartItem[] = [];
+    // Let's map some items
+    const tempItems: CheckoutCartItem[] = [];
 
     for (let i = 0; i < order.items.length; i++) {
-        const itemInOrder = order.items[i];
+        const item = order.items[i];
+        const menuItem = restaurant.menu.find((it) => it.id === item.itemId);
 
-        let index = -1;
+        if (!menuItem) continue;
 
-        // Finds the item in items that is equal to this
-        for (let i = 0; i < items.length; i++) {
-            const item = items[i];
-            if (item.id === itemInOrder.id) index = i;
-        }
-
-        if (index !== -1) {
-            items[i].amount += 1;
-        } else {
-            items.push({
-                ...itemInOrder,
-                amount: 1,
-            });
-        }
+        tempItems.push({
+            ...menuItem,
+            quantity: item.quantity,
+        });
     }
 
     return {
@@ -112,8 +127,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
             restaurant,
             user: fullUser,
             order: order,
-            items,
+            items: tempItems,
             itemCount: order.items.length,
+            note: order.note,
         },
     };
 };

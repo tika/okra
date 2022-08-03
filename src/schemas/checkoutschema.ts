@@ -6,7 +6,7 @@ export const checkoutSchema = z.object({
     items: z.array(
         z.object({
             itemId: z.number(),
-            amount: z.number(),
+            quantity: z.number(),
         })
     ),
     note: z.string().optional(),

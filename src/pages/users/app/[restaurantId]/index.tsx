@@ -111,7 +111,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                     item={cartItem}
                     amount={
                         cart?.get().find((it) => it.itemId === cartItem?.id)
-                            ?.amount ?? 0
+                            ?.quantity ?? 0
                     }
                     close={() => setCartItem(undefined)}
                     change={itemChange}
@@ -199,7 +199,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                                                                 (it) =>
                                                                     it.itemId ==
                                                                     item.id
-                                                            )?.amount || 0
+                                                            )?.quantity || 0
                                                     }
                                                 />
                                             ))}
@@ -221,7 +221,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                                                                 (it) =>
                                                                     it.itemId ==
                                                                     item.id
-                                                            )?.amount || 0
+                                                            )?.quantity || 0
                                                     }
                                                 />
                                             ))}

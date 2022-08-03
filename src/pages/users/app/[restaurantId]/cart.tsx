@@ -35,7 +35,6 @@ export default function CartPage(props: Props & DefaultProps) {
 
     // Set cart
     useEffect(() => {
-        // setCart(new Cart(props.restaurant.id));
         const cart = new Cart(props.restaurant.id);
         const cartItems = cart.get();
         const temp = [];
@@ -49,11 +48,11 @@ export default function CartPage(props: Props & DefaultProps) {
             if (!menuItem) continue;
 
             temp.push({
-                amount: cartItems[i].amount,
+                quantity: cartItems[i].quantity,
                 ...menuItem,
             });
 
-            tempTotal += cartItems[i].amount * menuItem.price;
+            tempTotal += cartItems[i].quantity * menuItem.price;
         }
 
         setItems(temp);
@@ -100,9 +99,11 @@ export default function CartPage(props: Props & DefaultProps) {
                         {items.map((it) => (
                             <div className={styles.item}>
                                 <h1>
-                                    {it.amount}x {it.name}
+                                    {it.quantity}x {it.name}
                                 </h1>
-                                <span>{formatPrice(it.amount * it.price)}</span>
+                                <span>
+                                    {formatPrice(it.quantity * it.price)}
+                                </span>
                             </div>
                         ))}
 
@@ -149,7 +150,9 @@ export default function CartPage(props: Props & DefaultProps) {
                         <button
                             onClick={() =>
                                 router.push(
-                                    `/users/app/${props.restaurant.id}/checkout`
+                                    `/users/app/${
+                                        props.restaurant.id
+                                    }/checkout${note ? "?note=" + note : ""}`
                                 )
                             }
                             disabled={total < props.restaurant.minOrderAmount}

@@ -3,6 +3,7 @@ import { checkoutSchema } from "../../../schemas/checkoutschema";
 import { prisma } from "../../../app/prisma";
 import { NotFoundError } from "../../../app/exceptions";
 import { formatPrice } from "../../../app/primitive";
+import { OrderItem } from "@prisma/client";
 
 export default createEndpoint({
     POST: async (req, res) => {
@@ -35,11 +36,11 @@ export default createEndpoint({
             const match = data.items.find((it) => it.itemId === items[i].id);
             if (!match) continue;
 
-            total += items[i].price * match.amount;
+            total += items[i].price * match.quantity;
         }
 
         const charge = await stripe.charges.create({
-            amount: total * 100, // todo: calculate amount
+            amount: total * 100,
             currency: "gbp",
             description: `Items: ${data.items
                 .map((it) => it.itemId)
@@ -47,23 +48,21 @@ export default createEndpoint({
             source: data.token,
         });
 
-        // Multiply the number of items in the array
-        // I know this is bad, but uh well.
-        const arr = [];
+        // Temporarily holds the OrderItems
+        const temp: Omit<OrderItem, "id" | "orderId">[] = [];
 
-        for (let i = 0; i < data.items.length; i++) {
-            for (let j = 0; j < data.items[i].amount; j++) {
-                arr.push({ id: data.items[i].itemId });
-            }
-        }
-
-        console.log(arr);
+        data.items.forEach((it) =>
+            temp.push({
+                quantity: it.quantity,
+                itemId: it.itemId,
+            })
+        );
 
         const order = await prisma.order.create({
             data: {
                 note: data.note ?? "",
                 items: {
-                    connect: arr,
+                    create: temp,
                 },
                 userId: data.userId,
                 restaurantId: data.restaurantId,
@@ -72,8 +71,6 @@ export default createEndpoint({
                 items: true,
             },
         });
-
-        console.log(order.items);
 
         console.log(
             `${data.userId} made a purchase for ${formatPrice(total)}, id: ${

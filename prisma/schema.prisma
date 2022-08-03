@@ -71,7 +71,7 @@ model Order {
 
 model OrderItem {
   id String @id @default(cuid())
-  quantity Int? // How many items
+  quantity Int // How many items
   item Item @relation(references: [id], fields: [itemId])
   itemId Int
   order Order @relation(references: [id], fields: [orderId])
@@ -82,8 +82,7 @@ model Review {
   id String @id @default(cuid())
   createdAt DateTime @default(now())
   rating Int // out of 5
-  title String
-  Description String
+  description String
   restaurant Restaurant @relation(references: [id], fields: [restaurantId])
   restaurantId Int
   user User @relation(references: [id], fields: [userId])

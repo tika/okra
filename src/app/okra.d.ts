@@ -14,7 +14,12 @@ export type BaseItem = Omit<Item, "id" | "restaurantId"> & {
 };
 export interface CartItem {
     itemId: number;
-    amount: number;
+    quantity: number;
 }
 
-export type CheckoutCartItem = Item & { amount: number };
+export type CheckoutCartItem = Item & { quantity: number };
+
+export type Feedback = {
+    starCount: number;
+    text: string;
+};

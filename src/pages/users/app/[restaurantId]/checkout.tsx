@@ -36,7 +36,7 @@ export default function Checkout(props: DefaultProps & Props) {
 
             if (!menuItem) continue;
 
-            tempTotal += cartItems[i].amount * menuItem.price;
+            tempTotal += cartItems[i].quantity * menuItem.price;
         }
 
         setCart(temp);

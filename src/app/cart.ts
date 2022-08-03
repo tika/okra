@@ -39,8 +39,8 @@ export class Cart {
             if (match.length === 0) {
                 y.push(elem);
             } else {
-                // Otherwise find the amount
-                match[0].amount = elem.amount;
+                // Otherwise find the quantity
+                match[0].quantity = elem.quantity;
             }
         }
 
@@ -49,7 +49,7 @@ export class Cart {
 
     // Adds an item to the cart
     // Returns the new items in the cart
-    public add(item: Item, amount: number) {
+    public add(item: Item, quantity: number) {
         let items = this.get();
 
         // If there aren't already items, lets set that key equal to a blank array
@@ -60,7 +60,7 @@ export class Cart {
 
         items.push({
             itemId: item.id,
-            amount,
+            quantity,
         });
 
         // Compact duplicate ids

@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { toastStyle } from "../app/constants";
 import { CartItem } from "../app/okra";
 import { formatPrice } from "../app/primitive";
+import { useState, useEffect } from "react";
 
 interface Props {
     restaurantId: number;
@@ -19,6 +20,15 @@ interface Props {
 export default function CheckoutForm(props: Props) {
     const stripe = useStripe();
     const elements = useElements();
+    const [disabled, setDisabled] = useState(true);
+
+    useEffect(() => {
+        if (!stripe) {
+            setDisabled(true);
+        }
+
+        setDisabled(false);
+    }, [stripe]);
 
     async function handleSubmit(event: FormEvent) {
         // We don't want to let default form submission happen here,
@@ -45,6 +55,8 @@ export default function CheckoutForm(props: Props) {
                 style: toastStyle,
             });
         } else {
+            setDisabled(true);
+
             // Send the token to your server.
             stripeTokenHandler(
                 result.token,
@@ -52,7 +64,7 @@ export default function CheckoutForm(props: Props) {
                 props.note,
                 props.userId,
                 props.items
-            );
+            ).then(() => setDisabled(false));
         }
     }
 
@@ -61,7 +73,7 @@ export default function CheckoutForm(props: Props) {
             <CardSection />
             <div className={styles.action}>
                 <span>Your total today is {formatPrice(props.total)}</span>
-                <button disabled={!stripe}>Pay</button>
+                <button disabled={disabled}>Pay</button>
             </div>
         </form>
     );
