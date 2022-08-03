@@ -72,7 +72,6 @@ export default function Edit({ restaurant, main }: Props & DefaultProps) {
                 }
             });
 
-
             await fetcher("PATCH", "/restaurants", submittedData);
             await router.push("/restaurants/app/edit");
         }
@@ -208,6 +207,7 @@ export default function Edit({ restaurant, main }: Props & DefaultProps) {
                             />
                         </div>
                     </form>
+
                     <h2 style={{ marginTop: "1em" }}>
                         Delete your restaurant account
                     </h2>
@@ -223,6 +223,13 @@ export default function Edit({ restaurant, main }: Props & DefaultProps) {
                     >
                         Delete
                     </button>
+
+                    <h2 style={{ marginTop: "1em", marginBottom: "10px" }}>
+                        Log out of our account
+                    </h2>
+                    <a href="/restaurants/logout" className="highlight">
+                        Logout
+                    </a>
                 </div>
             </main>
         </div>

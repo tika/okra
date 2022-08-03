@@ -190,6 +190,13 @@ export default function Edit({ user, main }: Props & DefaultProps) {
                     >
                         Delete
                     </button>
+
+                    <h2 style={{ marginTop: "1em", marginBottom: "10px" }}>
+                        Log out of our account
+                    </h2>
+                    <a href="/users/logout" className="highlight">
+                        Logout
+                    </a>
                 </div>
             </main>
         </div>
