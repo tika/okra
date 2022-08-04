@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { fetcher } from "../../../app/fetch";
 import { toastStyle } from "../../../app/constants";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface Props {
     user: User;
@@ -110,12 +111,12 @@ export default function Edit({ user, main }: Props & DefaultProps) {
                             <h1>Edit Profile</h1>
                             <button type="submit">Update</button>
                         </div>
-                        <a
+                        <Link
                             className="highlight"
                             href={`/users/app/view/${user.id}`}
                         >
                             View profile
-                        </a>
+                        </Link>
                         <div className={styles.inputs}>
                             <FormInput
                                 title={`Username (currently ${user.name})`}
@@ -194,9 +195,9 @@ export default function Edit({ user, main }: Props & DefaultProps) {
                     <h2 style={{ marginTop: "1em", marginBottom: "10px" }}>
                         Log out of our account
                     </h2>
-                    <a href="/users/logout" className="highlight">
+                    <Link href="/users/logout" className="highlight">
                         Logout
-                    </a>
+                    </Link>
                 </div>
             </main>
         </div>

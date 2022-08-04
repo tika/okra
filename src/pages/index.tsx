@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React from "react";
-import Logo from "../components/Logo";
 import styles from "../styles/Index.module.css";
 import { DefaultProps } from "../app/okra";
 import { Navbar } from "../components/Navbar";
+import Link from "next/link";
 
 interface Props {}
 
@@ -13,12 +13,12 @@ export default function Index(props: DefaultProps & Props) {
             <header>
                 <Navbar>
                     <div className={styles.buttons}>
-                        <a className="btn dark" href="/users/signup">
+                        <Link className="btn dark" href="/users/signup">
                             Sign Up
-                        </a>
-                        <a className="btn" href="/users/login">
+                        </Link>
+                        <Link className="btn" href="/users/login">
                             Login
-                        </a>
+                        </Link>
                     </div>
                 </Navbar>
             </header>
@@ -29,9 +29,9 @@ export default function Index(props: DefaultProps & Props) {
                         door
                     </h1>
                     <h2>Log in to start ordering</h2>
-                    <a className="btn" href="/users/signup">
+                    <Link className="btn" href="/users/signup">
                         Start
-                    </a>
+                    </Link>
                 </div>
                 <div className={styles.imageContainer}>
                     <div className={styles.image}>
@@ -39,6 +39,7 @@ export default function Index(props: DefaultProps & Props) {
                             layout="fill"
                             src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
                             className="darken"
+                            alt="Background image"
                         />
                     </div>
                 </div>
@@ -46,11 +47,11 @@ export default function Index(props: DefaultProps & Props) {
             <footer className={styles.footer}>
                 <p>
                     This is CS50 - by{" "}
-                    <a className="highlight" href="https://tika.is/">
+                    <Link className="highlight" href="https://tika.is/">
                         Tika
-                    </a>
+                    </Link>
                 </p>
-                <a href="/restaurants/login">Own a restaurant?</a>
+                <Link href="/restaurants/login">Own a restaurant?</Link>
             </footer>
         </div>
     );

@@ -45,7 +45,12 @@ export default function App(props: Props & DefaultProps) {
                                 }
                             >
                                 <div className={styles.img}>
-                                    <Image src={it.logo} layout="fill" />
+                                    <Image
+                                        key={it.id}
+                                        src={it.logo}
+                                        layout="fill"
+                                        alt={"Logo of " + it.name}
+                                    />
                                 </div>
                                 <div className={styles.padding}>
                                     <div className={styles.details}>

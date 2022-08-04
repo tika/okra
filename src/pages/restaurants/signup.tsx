@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import { RestaurantJWT } from "../../app/restaurantjwt";
 import { prisma } from "../../app/prisma";
+import Link from "next/link";
 
 interface Props {}
 
@@ -79,9 +80,9 @@ export default function SignUp(props: DefaultProps & Props) {
                     <h1>Restaurant Sign Up</h1>
                     <h2>
                         Already got an account?{" "}
-                        <a className="highlight" href="/restaurants/login">
+                        <Link className="highlight" href="/restaurants/login">
                             Login
-                        </a>
+                        </Link>
                     </h2>
                 </div>
 

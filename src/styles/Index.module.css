@@ -8,6 +8,9 @@
     width: 100%;
     height: calc(100vh - 0.75em * 2 - 1em - 2em * 2 - 2.5em);
     z-index: 1;
+    overflow: hidden;
+    border-radius: 0.5em;
+    filter: brightness(50%);
 }
 
 .top {

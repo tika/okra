@@ -1,17 +1,17 @@
-import { Item, Restaurant } from "@prisma/client";
+import { Restaurant } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { RestaurantJWT } from "../../../app/restaurantjwt";
 import { BaseItem, DefaultProps } from "../../../app/okra";
 import { Navbar } from "../../../components/Navbar";
 import { prisma } from "../../../app/prisma";
 import { DisplayRestaurant } from "../../../components/DisplayRestaurant";
-import { useState } from "react";
 import { MenuItemEdit } from "../../../components/MenuItemEdit";
 import { useRouter } from "next/router";
 import { fetcher } from "../../../app/fetch";
 import toast from "react-hot-toast";
 import { toastStyle } from "../../../app/constants";
 import styles from "../../../styles/RestaurantMenu.module.css";
+import Link from "next/link";
 
 interface Props {
     restaurant: Restaurant;
@@ -65,8 +65,8 @@ export default function App(props: Props & DefaultProps) {
         <div className={props.main}>
             <header>
                 <Navbar>
-                    <a href="/restaurants/app/menu">Menu</a>
-                    <a href="/restaurants/app/orders">Orders</a>
+                    <Link href="/restaurants/app/menu">Menu</Link>
+                    <Link href="/restaurants/app/orders">Orders</Link>
                     <DisplayRestaurant restaurant={props.restaurant} />
                 </Navbar>
             </header>

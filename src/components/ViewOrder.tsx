@@ -21,7 +21,7 @@ export function ViewOrder(props: Props) {
         <div className={styles.main}>
             <ul className={styles.items}>
                 {props.order.items.map((it) => (
-                    <li>
+                    <li key={it.id}>
                         {it.quantity}x {it.item.name}
                     </li>
                 ))}

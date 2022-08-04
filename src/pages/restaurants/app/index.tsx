@@ -8,6 +8,7 @@ import { DisplayRestaurant } from "../../../components/DisplayRestaurant";
 import styles from "../../../styles/RestaurantApp.module.css";
 import { ViewReview } from "../../../components/ViewReview";
 import { ViewOrder } from "../../../components/ViewOrder";
+import Link from "next/link";
 
 interface Props {
     restaurant: Restaurant;
@@ -25,8 +26,8 @@ export default function App(props: Props & DefaultProps) {
         <div className={props.main}>
             <header>
                 <Navbar>
-                    <a href="/restaurants/app/menu">Menu</a>
-                    <a href="/restaurants/app/orders">Orders</a>
+                    <Link href="/restaurants/app/menu">Menu</Link>
+                    <Link href="/restaurants/app/orders">Orders</Link>
                     <DisplayRestaurant restaurant={props.restaurant} />
                 </Navbar>
             </header>

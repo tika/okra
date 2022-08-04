@@ -41,7 +41,7 @@ export default function Checkout(props: DefaultProps & Props) {
 
         setCart(temp);
         setTotal(tempTotal);
-    }, []);
+    }, [props.menu, props.restaurant.id]);
 
     return (
         <div className={props.main}>

@@ -15,7 +15,11 @@ export function MenuItem({ item, onPlus, amount }: Props) {
         <div className={`${styles.main} ${item.image && styles.mainImg}`}>
             {item.image && (
                 <div className={styles.img}>
-                    <Image src={item.image} layout="fill" />
+                    <Image
+                        alt={"Image of " + item.name}
+                        src={item.image}
+                        layout="fill"
+                    />
                 </div>
             )}
             <div className={styles.info}>

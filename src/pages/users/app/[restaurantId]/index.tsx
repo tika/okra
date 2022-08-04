@@ -20,7 +20,7 @@ import {
     StarIcon,
 } from "@heroicons/react/outline";
 import { MenuItem } from "../../../../components/MenuItem";
-import { createRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AddItemModal } from "../../../../components/AddItemModal";
 import { Cart } from "../../../../app/cart";
 import toast from "react-hot-toast";
@@ -36,16 +36,14 @@ interface Props {
 
 export default function ViewRestaurant(props: Props & DefaultProps) {
     const [itemsShown, setItemsShown] = useState(props.menu);
-    const [categoryContainers, setCategoryContainers] = useState([]);
     const [categoriesShown, setCategoriesShown] = useState(getCategories());
-    const [highlightedCategory, setHighlightedCategory] = useState(0);
-    const [cartItem, setCartItem] = useState<Item | undefined>(); // TODO: better name
+    const [viewItem, setViewItem] = useState<Item | undefined>(); // TODO: better name
     const [cart, setCart] = useState<Cart>();
 
     // This is silly, but because of a Hydration warning, we must first wait for the entire window to mount before using localstorage.
     useEffect(() => {
         setCart(new Cart(props.restaurant.id));
-    }, []);
+    }, [props.restaurant.id]);
 
     // Gets categories from the items shown
     function getCategories() {
@@ -53,16 +51,6 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
             new Set(itemsShown.map((it) => capitalise(it.category)))
         );
     }
-
-    // Every time getCategories updates
-    useEffect(() => {
-        // add or remove refs
-        setCategoryContainers((categoryContainers) =>
-            Array(categoriesShown.length)
-                .fill([])
-                .map((_, i) => categoryContainers[i] || createRef())
-        );
-    }, [categoriesShown]);
 
     // Matches name
     function onSearch(val: string) {
@@ -79,21 +67,21 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
 
     function itemChange(amount: number) {
         // Something's gone wrong
-        if (!cartItem || !cart) return;
+        if (!viewItem || !cart) return;
 
         // Then we want to remove item from
         if (amount === 0) {
-            cart.remove(cartItem.id);
+            cart.remove(viewItem.id);
 
             // Close this window, and update UI
-            toast(`Removed ${cartItem.name} from cart`);
+            toast(`Removed ${viewItem.name} from cart`);
         } else {
-            cart.add(cartItem, amount);
+            cart.add(viewItem, amount);
 
-            toast(`Added ${cartItem.name} to cart`);
+            toast(`Added ${viewItem.name} to cart`);
         }
 
-        setCartItem(undefined);
+        setViewItem(undefined);
     }
 
     return (
@@ -113,12 +101,12 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
             </header>
             <main className={styles.main}>
                 <AddItemModal
-                    item={cartItem}
+                    item={viewItem}
                     amount={
-                        cart?.get().find((it) => it.itemId === cartItem?.id)
+                        cart?.get().find((it) => it.itemId === viewItem?.id)
                             ?.quantity ?? 0
                     }
-                    close={() => setCartItem(undefined)}
+                    close={() => setViewItem(undefined)}
                     change={itemChange}
                 />
                 <div className={styles.sidebar}>
@@ -159,14 +147,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                     </div>
                     <div className={styles.categories}>
                         {categoriesShown.map((it, i) => (
-                            <h3
-                                key={it}
-                                className={`${
-                                    highlightedCategory === i && "highlight"
-                                }`}
-                            >
-                                {it}
-                            </h3>
+                            <h3 key={it}>{it}</h3>
                         ))}
                     </div>
                 </div>
@@ -187,11 +168,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                             );
 
                             return (
-                                <div
-                                    key={i}
-                                    className={styles.itemsContainer}
-                                    ref={categoryContainers[i]}
-                                >
+                                <div key={i} className={styles.itemsContainer}>
                                     <h2>{capitalise(it)}</h2>
                                     <div>
                                         {categoryItems
@@ -200,7 +177,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                                                 <MenuItem
                                                     key={item.id}
                                                     onPlus={() =>
-                                                        setCartItem(item)
+                                                        setViewItem(item)
                                                     }
                                                     item={item}
                                                     amount={
@@ -222,7 +199,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                                                 <MenuItem
                                                     key={item.id}
                                                     onPlus={() =>
-                                                        setCartItem(item)
+                                                        setViewItem(item)
                                                     }
                                                     item={item}
                                                     amount={

@@ -32,7 +32,11 @@ export default function UserProfile(props: Props & DefaultProps) {
                     <h1>Recent reviews</h1>
                     <div className={styles.reviews}>
                         {props.reviews.map((it) => (
-                            <ViewReview restaurant={it.restaurant} data={it} />
+                            <ViewReview
+                                key={it.id}
+                                restaurant={it.restaurant}
+                                data={it}
+                            />
                         ))}
                     </div>
                 </div>

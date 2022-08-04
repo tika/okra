@@ -9,6 +9,7 @@ import { GetServerSideProps } from "next";
 import { UserJWT } from "../../app/userjwt";
 import { useRouter } from "next/router";
 import { prisma } from "../../app/prisma";
+import Link from "next/link";
 
 interface Props {}
 
@@ -47,9 +48,9 @@ export default function Login(props: Props & DefaultProps) {
                     <h1>Login</h1>
                     <h2>
                         Don&apos;t have an account?{" "}
-                        <a className="highlight" href="/users/signup">
+                        <Link className="highlight" href="/users/signup">
                             Sign Up
-                        </a>
+                        </Link>
                     </h2>
                 </div>
 

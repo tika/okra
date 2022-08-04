@@ -55,7 +55,11 @@ export function AddItemModal(props: Props) {
                     </button>
                     {props.item.image && (
                         <div className={styles.image}>
-                            <Image src={props.item.image} layout="fill" />
+                            <Image
+                                alt={"Image of " + props.item.name}
+                                src={props.item.image}
+                                layout="fill"
+                            />
                         </div>
                     )}
                     <div className={styles.content}>

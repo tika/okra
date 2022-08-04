@@ -23,6 +23,7 @@ import {
 import styles from "../../../../styles/Cart.module.css";
 import { FormInput } from "../../../../components/FormInput";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface Props {
     user: User;
@@ -62,7 +63,7 @@ export default function CartPage(props: Props & DefaultProps) {
 
         setItems(temp);
         setTotal(tempTotal);
-    }, []);
+    }, [props.menu, props.restaurant.id]);
 
     return (
         <div className={props.main}>
@@ -74,13 +75,13 @@ export default function CartPage(props: Props & DefaultProps) {
             <div className={styles.main}>
                 <div>
                     <div></div>
-                    <a
+                    <Link
                         href={`/users/app/${props.restaurant.id}`}
                         className={styles.return}
                     >
                         <ArrowLeftIcon />
                         <span>Return to menu</span>
-                    </a>
+                    </Link>
                     <div className={styles.top}>
                         <h1>Your Cart at {props.restaurant.name}</h1>
                         <div className={styles.info}>
@@ -104,7 +105,7 @@ export default function CartPage(props: Props & DefaultProps) {
 
                     <div className={styles.items}>
                         {items.map((it) => (
-                            <div className={styles.item}>
+                            <div className={styles.item} key={it.id}>
                                 <h1>
                                     {it.quantity}x {it.name}
                                 </h1>

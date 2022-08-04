@@ -36,7 +36,11 @@ export function ViewReview(props: Props) {
                 {props.restaurant ? (
                     <>
                         <div className={styles.image}>
-                            <Image src={props.restaurant.logo} layout="fill" />
+                            <Image
+                                alt={"Logo of " + props.restaurant.name}
+                                src={props.restaurant.logo}
+                                layout="fill"
+                            />
                         </div>
                         <span>
                             {props.restaurant.name} •{" "}

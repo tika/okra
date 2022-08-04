@@ -38,7 +38,7 @@ export default function FinishOrder(props: Props & DefaultProps) {
                     </h2>
                     <div>
                         {props.reviews.map((it) => (
-                            <ViewReview user={it.user} data={it} />
+                            <ViewReview key={it.id} user={it.user} data={it} />
                         ))}
                     </div>
                 </div>

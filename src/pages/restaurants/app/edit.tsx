@@ -1,9 +1,8 @@
-import { Restaurant, User } from "@prisma/client";
+import { Restaurant } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { DefaultProps } from "../../../app/okra";
 import { Navbar } from "../../../components/Navbar";
 import { prisma } from "../../../app/prisma";
-import { DisplayUser } from "../../../components/DisplayUser";
 import { FormInput } from "../../../components/FormInput";
 import { FormEvent, useState } from "react";
 import styles from "../../../styles/EditUser.module.css";
@@ -14,6 +13,7 @@ import { useRouter } from "next/router";
 import { RestaurantJWT } from "../../../app/restaurantjwt";
 import { DisplayRestaurant } from "../../../components/DisplayRestaurant";
 import { isNumber } from "../../../app/primitive";
+import Link from "next/link";
 
 interface Props {
     restaurant: Restaurant;
@@ -227,9 +227,9 @@ export default function Edit({ restaurant, main }: Props & DefaultProps) {
                     <h2 style={{ marginTop: "1em", marginBottom: "10px" }}>
                         Log out of our account
                     </h2>
-                    <a href="/restaurants/logout" className="highlight">
+                    <Link href="/restaurants/logout" className="highlight">
                         Logout
-                    </a>
+                    </Link>
                 </div>
             </main>
         </div>

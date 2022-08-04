@@ -11,6 +11,7 @@ import { fetcher } from "../../../app/fetch";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { toastStyle } from "../../../app/constants";
+import Link from "next/link";
 
 interface Props {
     restaurant: Restaurant;
@@ -63,8 +64,8 @@ export default function Orders(props: Props & DefaultProps) {
         <div className={props.main}>
             <header>
                 <Navbar>
-                    <a href="/restaurants/app/menu">Menu</a>
-                    <a href="/restaurants/app/orders">Orders</a>
+                    <Link href="/restaurants/app/menu">Menu</Link>
+                    <Link href="/restaurants/app/orders">Orders</Link>
                     <DisplayRestaurant restaurant={props.restaurant} />
                 </Navbar>
             </header>
@@ -78,6 +79,7 @@ export default function Orders(props: Props & DefaultProps) {
                             .filter((it) => it.order.completedAt === null)
                             .map((it) => (
                                 <ViewOrder
+                                    key={it.order.id}
                                     order={it.order}
                                     total={it.total}
                                     complete={() => complete(it.order)}
@@ -91,7 +93,11 @@ export default function Orders(props: Props & DefaultProps) {
                         {props.orders
                             .filter((it) => it.order.completedAt !== null)
                             .map((it) => (
-                                <ViewOrder order={it.order} total={it.total} />
+                                <ViewOrder
+                                    key={it.order.id}
+                                    order={it.order}
+                                    total={it.total}
+                                />
                             ))}
                     </div>
                 </div>
