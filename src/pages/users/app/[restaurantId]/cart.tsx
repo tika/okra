@@ -1,4 +1,4 @@
-import { DefaultProps, CheckoutCartItem } from "../../../../app/okra";
+import { DefaultProps, CheckoutCartItem, Distance } from "../../../../app/okra";
 import { useEffect, useState } from "react";
 import { Cart } from "../../../../app/cart";
 import { Navbar } from "../../../../components/Navbar";
@@ -8,6 +8,8 @@ import {
     convertTime,
     formatPrice,
     isNumber,
+    mToKm,
+    secondsToMins,
 } from "../../../../app/primitive";
 import { prisma } from "../../../../app/prisma";
 import { UserJWT } from "../../../../app/userjwt";
@@ -24,12 +26,14 @@ import styles from "../../../../styles/Cart.module.css";
 import { FormInput } from "../../../../components/FormInput";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { calcDistance } from "../../../../app/maps";
 
 interface Props {
     user: User;
     restaurant: Restaurant;
     menu: Item[];
     lastOrderCompletedAt: Date | null;
+    distanceFromUser: Distance;
 }
 
 export default function CartPage(props: Props & DefaultProps) {
@@ -96,7 +100,11 @@ export default function CartPage(props: Props & DefaultProps) {
                             </div>
                             <div>
                                 <LocationMarkerIcon />
-                                <span>0.22 miles away • 2 mins away</span>
+                                <span>
+                                    {mToKm(props.distanceFromUser.meters)} •{" "}
+                                    {secondsToMins(props.distanceFromUser.time)}{" "}
+                                    away
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -215,12 +223,32 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
         },
     });
 
+    // distance from user
+    const a = {
+        line1: fullUser.address1,
+        line2: fullUser.address2,
+        city: fullUser.city,
+        postcode: fullUser.postcode,
+    };
+
+    const b = {
+        line1: restaurant.address1,
+        line2: restaurant.address2,
+        city: restaurant.city,
+        postcode: restaurant.postcode,
+    };
+
+    const distance = await calcDistance(a, b);
+
+    if (!distance) return { notFound: true };
+
     return {
         props: {
             restaurant,
             user: fullUser,
             menu: restaurant.menu,
             lastOrderCompletedAt: lastOrder ? lastOrder.completedAt : null,
+            distanceFromUser: distance,
         },
     };
 };

@@ -39,3 +39,8 @@ export type OrderWithUser = Order & { user: User } & {
         item: Item;
     })[];
 };
+
+export type Distance = {
+    time: number;
+    meters: number;
+};

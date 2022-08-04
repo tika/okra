@@ -1,4 +1,5 @@
 import { Client, PlaceInputType } from "@googlemaps/google-maps-services-js";
+import { Distance } from "./okra";
 import { formatAddress } from "./primitive";
 
 const client = new Client({});
@@ -29,7 +30,7 @@ export async function findPlace(address: Address) {
 
     // If the address doesnt end with England, then we've screwed up
     if (
-        [
+        ![
             "uk",
             "united kingdom",
             "england",
@@ -38,7 +39,7 @@ export async function findPlace(address: Address) {
             "gb",
             "ireland",
             "ie",
-        ].includes(splitted[splitted.length - 1].toLowerCase())
+        ].includes(splitted[splitted.length - 1].toLowerCase().trim())
     ) {
         return null;
     }
@@ -50,11 +51,6 @@ export async function isValidAddress(address: Address) {
     const place = await findPlace(address);
     return place !== null;
 }
-
-type Distance = {
-    time: number;
-    km: number;
-};
 
 // Find time + meters from one place to another
 export async function calcDistance(
@@ -83,6 +79,6 @@ export async function calcDistance(
 
     return {
         time: result[0].duration.value,
-        km: result[0].distance.value,
+        meters: result[0].distance.value,
     };
 }

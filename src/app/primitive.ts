@@ -43,6 +43,16 @@ export function millisToMins(millis: number) {
     return `${mins} min${mins !== 1 ? "s" : ""}`;
 }
 
+export function secondsToMins(seconds: number) {
+    const mins = Math.round(seconds / 60);
+    return `${mins} min${mins !== 1 ? "s" : ""}`;
+}
+
+export function mToKm(meters: number) {
+    const km = Math.round(meters / 1000);
+    return `${km} km`;
+}
+
 export function formatAddress(address: {
     line1: string;
     line2: string | null;

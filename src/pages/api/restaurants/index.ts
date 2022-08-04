@@ -2,6 +2,7 @@ import { createEndpoint } from "../../../app/endpoint";
 import {
     AuthorizationError,
     ConflictError,
+    HTTPError,
     NotFoundError,
 } from "../../../app/exceptions";
 import {
@@ -14,10 +15,22 @@ import { RestaurantJWT } from "../../../app/restaurantjwt";
 import { prisma } from "../../../app/prisma";
 import { sanitiseRestaurant } from "../../../app/abstractedtypes";
 import { convertImage } from "../../../app/convertimage";
+import { isValidAddress } from "../../../app/maps";
 
 export default createEndpoint({
     POST: async (req, res) => {
         const data = registerSchema.parse(req.body);
+
+        // see if location is real
+        if (
+            !(await isValidAddress({
+                line1: data.address1,
+                line2: !data.address2 ? null : data.address2,
+                postcode: data.postcode,
+                city: data.city,
+            }))
+        )
+            throw new HTTPError(400, "This address doesn't exist");
 
         let newRestaurant;
         try {
@@ -58,6 +71,20 @@ export default createEndpoint({
             ))
         ) {
             throw new AuthorizationError("restaurant");
+        }
+
+        // see if location is real
+        if (data.address1 && data.city && data.postcode) {
+            if (
+                !(await isValidAddress({
+                    line1: data.address1,
+                    line2: !data.address2 ? null : data.address2,
+                    postcode: data.postcode,
+                    city: data.city,
+                }))
+            ) {
+                throw new HTTPError(400, "This address doesn't exist");
+            }
         }
 
         // Hash new password

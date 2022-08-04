@@ -2,6 +2,7 @@ import { createEndpoint } from "../../../app/endpoint";
 import {
     AuthorizationError,
     ConflictError,
+    HTTPError,
     NotFoundError,
 } from "../../../app/exceptions";
 import {
@@ -13,11 +14,23 @@ import argon2 from "argon2";
 import { UserJWT } from "../../../app/userjwt";
 import { prisma } from "../../../app/prisma";
 import { sanitiseUser } from "../../../app/abstractedtypes";
+import { isValidAddress } from "../../../app/maps";
 
 export default createEndpoint({
     POST: async (req, res) => {
         const { name, email, password, address1, address2, postcode, city } =
             registerSchema.parse(req.body);
+
+        // see if location is real
+        if (
+            !(await isValidAddress({
+                line1: address1,
+                line2: !address2 ? null : address2,
+                postcode,
+                city,
+            }))
+        )
+            throw new HTTPError(400, "This address doesn't exist");
 
         let newUser;
         try {
@@ -54,10 +67,28 @@ export default createEndpoint({
             where: { id: user.id },
         });
 
+        if (!fullUser) {
+            throw new NotFoundError("user");
+        }
+
         if (
             !(await argon2.verify(fullUser!.password as string, data.password))
         ) {
             throw new AuthorizationError("user");
+        }
+
+        // see if location is real
+        if (data.address1 && data.city && data.postcode) {
+            if (
+                !(await isValidAddress({
+                    line1: data.address1,
+                    line2: !data.address2 ? null : data.address2,
+                    postcode: data.postcode,
+                    city: data.city,
+                }))
+            ) {
+                throw new HTTPError(400, "This address doesn't exist");
+            }
         }
 
         // Hash new password
@@ -66,7 +97,10 @@ export default createEndpoint({
         }
 
         const { password, newPassword, ...toSend } = data;
-        const d = { ...toSend, password: newPassword };
+        const d = {
+            ...toSend,
+            password: newPassword,
+        };
 
         const updatedUser = await prisma.user.update({
             where: { id: user.id },

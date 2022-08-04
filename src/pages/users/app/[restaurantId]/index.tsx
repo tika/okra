@@ -1,7 +1,7 @@
 import { Item, Restaurant, User } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { UserJWT } from "../../../../app/userjwt";
-import { DefaultProps } from "../../../../app/okra";
+import { DefaultProps, Distance } from "../../../../app/okra";
 import { Navbar } from "../../../../components/Navbar";
 import { prisma } from "../../../../app/prisma";
 import { DisplayUser } from "../../../../components/DisplayUser";
@@ -9,10 +9,9 @@ import styles from "../../../../styles/ViewRestaurant.module.css";
 import {
     isNumber,
     capitalise,
-    convertDate,
-    convertTime,
-    formatTimeBetween,
     millisToMins,
+    mToKm,
+    secondsToMins,
 } from "../../../../app/primitive";
 import {
     CurrencyPoundIcon,
@@ -26,7 +25,7 @@ import { useEffect, useState } from "react";
 import { AddItemModal } from "../../../../components/AddItemModal";
 import { Cart } from "../../../../app/cart";
 import toast from "react-hot-toast";
-import { number } from "zod";
+import { calcDistance } from "../../../../app/maps";
 
 interface Props {
     user: User;
@@ -35,6 +34,7 @@ interface Props {
     reviewCount: number;
     starAverage: number;
     lastOrderTook: number;
+    distanceFromUser: Distance;
 }
 
 export default function ViewRestaurant(props: Props & DefaultProps) {
@@ -128,7 +128,11 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                         </div>
                         <div>
                             <LocationMarkerIcon />
-                            <span>0.22 miles away • 2 mins away</span>
+                            <span>
+                                {mToKm(props.distanceFromUser.meters)} •{" "}
+                                {secondsToMins(props.distanceFromUser.time)}{" "}
+                                away
+                            </span>
                         </div>
                         <div>
                             <ShoppingCartIcon />
@@ -286,6 +290,25 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
         take: 1,
     });
 
+    // distance from user
+    const a = {
+        line1: fullUser.address1,
+        line2: fullUser.address2,
+        city: fullUser.city,
+        postcode: fullUser.postcode,
+    };
+
+    const b = {
+        line1: restaurant.address1,
+        line2: restaurant.address2,
+        city: restaurant.city,
+        postcode: restaurant.postcode,
+    };
+
+    const distance = await calcDistance(a, b);
+
+    if (!distance) return { notFound: true };
+
     return {
         props: {
             user: fullUser,
@@ -300,6 +323,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
                     ? -1
                     : lastOrder.completedAt.getTime() -
                       lastOrder.createdAt.getTime(),
+            distanceFromUser: distance,
         },
     };
 };
