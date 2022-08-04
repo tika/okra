@@ -17,24 +17,23 @@
 .main {
     position: relative;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 5px;
     background-color: var(--coal);
     border-radius: 0.5em;
     padding: 0.5em 1em;
-    min-width: 15em;
+    max-width: 15em;
 }
 
 .mainImg {
     flex-direction: column;
     align-items: flex-start;
-    min-width: fit-content;
     padding: 0.5em;
 }
 
 .img {
-    width: 10em;
-    height: 10em;
+    width: 12em;
+    height: 12em;
     position: relative;
     overflow: hidden;
     border-radius: 0.5em;
@@ -52,4 +51,7 @@
 
 .info > h2 {
     font-weight: var(--bold);
+    word-break: break-inside;
+    word-wrap: break-word;
+    width: 9em;
 }

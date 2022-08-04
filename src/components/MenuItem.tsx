@@ -16,7 +16,7 @@ export function MenuItem({ item, onPlus, amount }: Props) {
             {item.image && (
                 <div className={styles.img}>
                     <Image
-                        alt={"Image of " + item.name}
+                        alt={`Image of ${item.name}`}
                         src={item.image}
                         layout="fill"
                     />
