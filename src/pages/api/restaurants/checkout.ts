@@ -2,8 +2,9 @@ import { createEndpoint } from "../../../app/endpoint";
 import { checkoutSchema } from "../../../schemas/checkoutschema";
 import { prisma } from "../../../app/prisma";
 import { NotFoundError } from "../../../app/exceptions";
-import { formatPrice } from "../../../app/primitive";
+import { formatPrice, formatAddress } from "../../../app/primitive";
 import { OrderItem } from "@prisma/client";
+import { sendEmail } from "../../../app/email";
 
 export default createEndpoint({
     POST: async (req, res) => {
@@ -68,9 +69,73 @@ export default createEndpoint({
                 restaurantId: data.restaurantId,
             },
             include: {
-                items: true,
+                user: true,
+                items: {
+                    include: {
+                        item: true,
+                    },
+                },
             },
         });
+
+        // Send an email to the user
+        sendEmail(order.user.email, "Order placed at " + restaurant.name, [
+            `Hi ${order.user.name}`,
+            "Thanks for placing your order, your food will be here shortly!",
+            "",
+            "Order summary:",
+            "Id: " + order.id,
+            "Items:",
+            order.items
+                .map(
+                    (it) =>
+                        ` - ${it.quantity}x ${it.item.name} (${formatPrice(
+                            it.item.price * it.quantity
+                        )})`
+                )
+                .join("\n"),
+            order.note ? "Note: " + order.note : "No note provided",
+            "",
+            "Delivery address:",
+            formatAddress({
+                line1: order.user.address1,
+                line2: order.user.address2,
+                city: order.user.city,
+                postcode: order.user.postcode,
+            }),
+            "",
+            "Okra",
+        ]);
+
+        // Send an email to the restaurant
+        sendEmail(restaurant.email, "New order from " + order.user.name, [
+            `Hi ${restaurant.name}`,
+            `You have a new order from ${order.user.name}`,
+            "",
+            "Order summary:",
+            "Id: " + order.id,
+            "Items:",
+            order.items
+                .map(
+                    (it) =>
+                        ` - ${it.quantity}x ${it.item.name} (${formatPrice(
+                            it.item.price * it.quantity
+                        )})`
+                )
+                .join("\n"),
+            order.note ? "Note: " + order.note : "No note provided",
+            "",
+            "Delivery address:",
+            formatAddress({
+                line1: order.user.address1,
+                line2: order.user.address2,
+                city: order.user.city,
+                postcode: order.user.postcode,
+            }),
+            "",
+            "Thanks for being a partner,",
+            "Okra",
+        ]);
 
         console.log(
             `${data.userId} made a purchase for ${formatPrice(total)}, id: ${

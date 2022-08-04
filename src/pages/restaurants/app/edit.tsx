@@ -227,9 +227,7 @@ export default function Edit({ restaurant, main }: Props & DefaultProps) {
                     <h2 style={{ marginTop: "1em", marginBottom: "10px" }}>
                         Log out of our account
                     </h2>
-                    <Link href="/restaurants/logout" className="highlight">
-                        Logout
-                    </Link>
+                    <Link href="/restaurants/logout">Logout</Link>
                 </div>
             </main>
         </div>
@@ -252,11 +250,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
         where: { id: restaurant.id },
     });
 
-    // TODO: logout
     if (!fullRestaurant) {
         return {
             redirect: {
-                destination: "/restaurants/login",
+                destination: "/restaurants/logout",
                 permanent: false,
             },
         };

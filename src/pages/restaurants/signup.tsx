@@ -80,9 +80,7 @@ export default function SignUp(props: DefaultProps & Props) {
                     <h1>Restaurant Sign Up</h1>
                     <h2>
                         Already got an account?{" "}
-                        <Link className="highlight" href="/restaurants/login">
-                            Login
-                        </Link>
+                        <Link href="/restaurants/login">Login</Link>
                     </h2>
                 </div>
 

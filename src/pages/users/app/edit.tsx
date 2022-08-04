@@ -111,10 +111,7 @@ export default function Edit({ user, main }: Props & DefaultProps) {
                             <h1>Edit Profile</h1>
                             <button type="submit">Update</button>
                         </div>
-                        <Link
-                            className="highlight"
-                            href={`/users/app/view/${user.id}`}
-                        >
+                        <Link href={`/users/app/view/${user.id}`}>
                             View profile
                         </Link>
                         <div className={styles.inputs}>
@@ -195,9 +192,7 @@ export default function Edit({ user, main }: Props & DefaultProps) {
                     <h2 style={{ marginTop: "1em", marginBottom: "10px" }}>
                         Log out of our account
                     </h2>
-                    <Link href="/users/logout" className="highlight">
-                        Logout
-                    </Link>
+                    <Link href="/users/logout">Logout</Link>
                 </div>
             </main>
         </div>

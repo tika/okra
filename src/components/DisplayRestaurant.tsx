@@ -4,12 +4,14 @@ import styles from "../styles/Display.module.css";
 
 interface Props {
     restaurant: Restaurant;
+    disabled?: boolean;
+    text?: string;
     dest?: string;
 }
 
 export function DisplayRestaurant(props: Props) {
-    return (
-        <a className={styles.main} href={props.dest ?? "/restaurants/app/edit"}>
+    const inner = (
+        <>
             <div className={styles.image}>
                 <Image
                     alt={"Logo of " + props.restaurant.name}
@@ -17,7 +19,23 @@ export function DisplayRestaurant(props: Props) {
                     layout="fill"
                 />
             </div>
-            <span>{props.restaurant.name}</span>
-        </a>
+            <span>{props.text ?? props.restaurant.name}</span>
+        </>
+    );
+
+    return (
+        <>
+            {props.disabled ? (
+                <div className={styles.main}>{inner}</div>
+            ) : (
+                <a
+                    className={styles.main}
+                    href={props.dest ?? "/restaurants/app/edit"}
+                    style={{ cursor: "pointer" }}
+                >
+                    {inner}
+                </a>
+            )}
+        </>
     );
 }

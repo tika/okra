@@ -1,5 +1,6 @@
 import { User } from "@prisma/client";
 import Avatar from "boring-avatars";
+import Link from "next/link";
 import styles from "../styles/Display.module.css";
 
 interface Props {

@@ -9,10 +9,11 @@ import styles from "../../../styles/UserApp.module.css";
 import Image from "next/image";
 import { LocationMarkerIcon, ShoppingCartIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
+import { formatTimeBetween, millisToMins } from "../../../app/primitive";
 
 interface Props {
     user: User;
-    restaurants: Restaurant[];
+    restaurants: (Restaurant & { latestTime: number })[];
 }
 
 export default function App(props: Props & DefaultProps) {
@@ -28,7 +29,7 @@ export default function App(props: Props & DefaultProps) {
             <main className={styles.center}>
                 <div>
                     <h1>Your hunger stops here.</h1>
-                    <h2 className="highlight">Find food in seconds.</h2>
+                    <h2>Find food in seconds.</h2>
                 </div>
                 <div>
                     <h6>
@@ -71,8 +72,12 @@ export default function App(props: Props & DefaultProps) {
                                             height="2em"
                                             width="2em"
                                         />
-                                        <span>Last order took 5 minutes</span>{" "}
-                                        {/*TODO*/}
+                                        <span>
+                                            {it.latestTime === -1
+                                                ? "No orders yet"
+                                                : `Last order took
+                                             ${millisToMins(it.latestTime)}`}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -114,12 +119,39 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
                 equals: fullUser.city,
             },
         },
+        include: {
+            orders: {
+                take: 1,
+                where: {
+                    completedAt: {
+                        not: null,
+                    },
+                },
+                orderBy: {
+                    completedAt: "desc",
+                },
+            },
+        },
     });
+
+    const temp = [];
+
+    for (let i = 0; i < restaurants.length; i++) {
+        const { orders, ...rest } = restaurants[i];
+        const completedAt = orders[0].completedAt?.getTime();
+
+        temp.push({
+            ...rest,
+            latestTime:
+                (completedAt && completedAt - orders[0].createdAt.getTime()) ??
+                -1,
+        });
+    }
 
     return {
         props: {
             user: fullUser,
-            restaurants: restaurants,
+            restaurants: temp,
         },
     };
 };

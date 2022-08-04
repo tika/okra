@@ -46,10 +46,7 @@ export default function Index(props: DefaultProps & Props) {
             </main>
             <footer className={styles.footer}>
                 <p>
-                    This is CS50 - by{" "}
-                    <Link className="highlight" href="https://tika.is/">
-                        Tika
-                    </Link>
+                    This is CS50 - by <Link href="https://tika.is/">Tika</Link>
                 </p>
                 <Link href="/restaurants/login">Own a restaurant?</Link>
             </footer>

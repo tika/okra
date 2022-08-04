@@ -11,6 +11,8 @@ import {
     capitalise,
     convertDate,
     convertTime,
+    formatTimeBetween,
+    millisToMins,
 } from "../../../../app/primitive";
 import {
     CurrencyPoundIcon,
@@ -24,6 +26,7 @@ import { useEffect, useState } from "react";
 import { AddItemModal } from "../../../../components/AddItemModal";
 import { Cart } from "../../../../app/cart";
 import toast from "react-hot-toast";
+import { number } from "zod";
 
 interface Props {
     user: User;
@@ -31,7 +34,7 @@ interface Props {
     menu: Item[];
     reviewCount: number;
     starAverage: number;
-    lastOrderCompletedAt: Date | null;
+    lastOrderTook: number;
 }
 
 export default function ViewRestaurant(props: Props & DefaultProps) {
@@ -130,12 +133,11 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                         <div>
                             <ShoppingCartIcon />
                             <span>
-                                {props.lastOrderCompletedAt
-                                    ? `Last order completed at
-                                ${convertDate(
-                                    props.lastOrderCompletedAt
-                                )} • ${convertTime(props.lastOrderCompletedAt)}`
-                                    : "No orders yet"}
+                                {props.lastOrderTook === -1
+                                    ? "No orders yet"
+                                    : `Last order took ${millisToMins(
+                                          props.lastOrderTook
+                                      )}`}
                             </span>
                         </div>
                         <div>
@@ -277,6 +279,11 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
         orderBy: {
             completedAt: "desc",
         },
+        select: {
+            completedAt: true,
+            createdAt: true,
+        },
+        take: 1,
     });
 
     return {
@@ -288,7 +295,11 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
             ),
             reviewCount: restaurant.reviews.length,
             starAverage: avg._avg.rating || 0,
-            lastOrderCompletedAt: lastOrder ? lastOrder.completedAt : null,
+            lastOrderTook:
+                !lastOrder || !lastOrder.completedAt
+                    ? -1
+                    : lastOrder.completedAt.getTime() -
+                      lastOrder.createdAt.getTime(),
         },
     };
 };

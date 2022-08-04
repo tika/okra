@@ -60,7 +60,9 @@ export default function FinishOrder(props: Props & DefaultProps) {
                         ))}
                     </div>
                     {props.note && (
-                        <p className={styles.note}>Your note to the restaurant: {props.note}</p>
+                        <p className={styles.note}>
+                            Your note to the restaurant: {props.note}
+                        </p>
                     )}
                     <FeedbackForm onSubmit={submitFeedback} />
                 </div>

@@ -31,9 +31,7 @@ export function ViewOrder(props: Props) {
                 <span>Note to restaurant: {props.order.note}</span>
             )}
 
-            <span className="highlight">
-                Order total: {formatPrice(props.total)}
-            </span>
+            <span>Order total: {formatPrice(props.total)}</span>
 
             <div className={styles.user}>
                 <DisplayUser
@@ -43,12 +41,7 @@ export function ViewOrder(props: Props) {
                     )} • ${convertTime(props.order.createdAt)}`}
                     dest={`/users/app/view/${props.order.user.id}`}
                 />
-                <a
-                    href={`mailto:${props.order.user.email}`}
-                    className="highlight"
-                >
-                    Contact
-                </a>
+                <a href={`mailto:${props.order.user.email}`}>Contact</a>
             </div>
 
             <span className={styles.address}>

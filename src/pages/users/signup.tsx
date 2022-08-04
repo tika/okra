@@ -64,10 +64,7 @@ export default function SignUp(props: DefaultProps & Props) {
                 <div>
                     <h1>Sign Up</h1>
                     <h2>
-                        Already grubbing?{" "}
-                        <Link className="highlight" href="/users/login">
-                            Login
-                        </Link>
+                        Already grubbing? <Link href="/users/login">Login</Link>
                     </h2>
                 </div>
 

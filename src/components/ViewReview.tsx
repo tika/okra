@@ -4,6 +4,7 @@ import Image from "next/image";
 import { convertDate } from "../app/primitive";
 import styles from "../styles/ViewReview.module.css";
 import { DisplayUser } from "./DisplayUser";
+import { DisplayRestaurant } from "./DisplayRestaurant";
 
 interface Props {
     data: Review;
@@ -33,31 +34,23 @@ export function ViewReview(props: Props) {
                 <p>{props.data.description}</p>
             </div>
             <div className={styles.footer}>
-                {props.restaurant ? (
-                    <>
-                        <div className={styles.image}>
-                            <Image
-                                alt={"Logo of " + props.restaurant.name}
-                                src={props.restaurant.logo}
-                                layout="fill"
-                            />
-                        </div>
-                        <span>
-                            {props.restaurant.name} •{" "}
-                            {convertDate(props.data.createdAt)}
-                        </span>
-                    </>
-                ) : (
-                    <>
-                        {props.user && (
-                            <DisplayUser
-                                user={props.user}
-                                text={`${props.user.name} • ${convertDate(
-                                    props.data.createdAt
-                                )}`}
-                            />
-                        )}
-                    </>
+                {props.restaurant && (
+                    <DisplayRestaurant
+                        restaurant={props.restaurant}
+                        text={`${props.restaurant.name} •
+                            ${convertDate(props.data.createdAt)}`}
+                        dest={`/users/app/${props.restaurant.id}`}
+                    />
+                )}
+
+                {props.user && (
+                    <DisplayUser
+                        user={props.user}
+                        text={`${props.user.name} • ${convertDate(
+                            props.data.createdAt
+                        )}`}
+                        dest={`/users/app/view/${props.user.id}`}
+                    />
                 )}
             </div>
         </div>

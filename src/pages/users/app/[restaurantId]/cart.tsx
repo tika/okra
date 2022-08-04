@@ -74,15 +74,13 @@ export default function CartPage(props: Props & DefaultProps) {
             </header>
             <div className={styles.main}>
                 <div>
-                    <div></div>
-                    <Link
-                        href={`/users/app/${props.restaurant.id}`}
-                        className={styles.return}
-                    >
-                        <ArrowLeftIcon />
-                        <span>Return to menu</span>
-                    </Link>
                     <div className={styles.top}>
+                        <Link href={`/users/app/${props.restaurant.id}`}>
+                            <span className={styles.return}>
+                                <ArrowLeftIcon />
+                                Return to menu
+                            </span>
+                        </Link>
                         <h1>Your Cart at {props.restaurant.name}</h1>
                         <div className={styles.info}>
                             <div>
