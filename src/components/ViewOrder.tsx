@@ -13,6 +13,7 @@ interface Props {
     cancel?: () => void;
     order: OrderWithUser;
     total: number;
+    displayComplete?: boolean;
 }
 
 export function ViewOrder(props: Props) {
@@ -59,6 +60,19 @@ export function ViewOrder(props: Props) {
                     postcode: props.order.user.postcode,
                 })}
             </span>
+
+            {props.displayComplete && (
+                <span
+                    className={
+                        props.order.completedAt !== null ? "highlight" : ""
+                    }
+                    style={{ fontWeight: "var(--bold)" }}
+                >
+                    {props.order.completedAt === null
+                        ? "Not completed"
+                        : "Completed"}
+                </span>
+            )}
 
             {props.complete && props.cancel && (
                 <div className={styles.buttons}>

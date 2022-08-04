@@ -9,3 +9,25 @@
     flex-direction: column;
     align-items: center;
 }
+
+.columns > div > h1 {
+    margin-bottom: 1em;
+}
+
+.columns > div > div {
+    max-height: calc(100vh - 15em);
+    overflow-y: auto;
+    padding-right: 1em;
+}
+
+.orders > div {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.reviews > div {
+    display: flex;
+    flex-direction: column;
+    gap: 3em;
+}
