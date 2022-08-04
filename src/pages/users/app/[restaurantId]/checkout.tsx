@@ -48,7 +48,12 @@ export default function Checkout(props: DefaultProps & Props) {
         loadStripe(props.restaurant.stripePublicKey).then((it) =>
             setStripe(it)
         );
-    }, [props.menu, props.restaurant.id]);
+    }, [
+        props.menu,
+        props.restaurant.id,
+        props.restaurant.deliveryFee,
+        props.restaurant.stripePublicKey,
+    ]);
 
     return (
         <div className={props.main}>

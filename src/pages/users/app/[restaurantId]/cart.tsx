@@ -69,7 +69,7 @@ export default function CartPage(props: Props & DefaultProps) {
 
         setItems(temp);
         setTotal(tempTotal);
-    }, [props.menu, props.restaurant.id]);
+    }, [props.menu, props.restaurant.id, props.restaurant.deliveryFee]);
 
     return (
         <div className={props.main}>
