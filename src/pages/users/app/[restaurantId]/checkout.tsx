@@ -45,8 +45,8 @@ export default function Checkout(props: DefaultProps & Props) {
         setCart(temp);
         setTotal(tempTotal);
 
-        loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as string).then(
-            (it) => setStripe(it)
+        loadStripe(props.restaurant.stripePublicKey).then((it) =>
+            setStripe(it)
         );
     }, [props.menu, props.restaurant.id]);
 
