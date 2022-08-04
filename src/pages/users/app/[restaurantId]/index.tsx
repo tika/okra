@@ -44,7 +44,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
     const [categoriesShown, setCategoriesShown] = useState(
         getCategories(props.menu)
     );
-    const [viewItem, setViewItem] = useState<Item | undefined>(); // TODO: better name
+    const [viewItem, setViewItem] = useState<Item | undefined>();
     const [cart, setCart] = useState<Cart>();
     const [searchVal, setSearchVal] = useState<string>();
     const debouncedSearch = useDebounce(searchVal);
