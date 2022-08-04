@@ -9,6 +9,7 @@ import { CartItem } from "../app/okra";
 import { formatPrice } from "../app/primitive";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { Cart } from "../app/cart";
 
 interface Props {
     restaurantId: number;
@@ -69,6 +70,10 @@ export default function CheckoutForm(props: Props) {
                 props.items
             ).then((res: any) => {
                 setDisabled(false);
+
+                // Clear cart
+                new Cart(props.restaurantId).set([]);
+
                 router.push(`/users/app/${props.restaurantId}/${res.id}`);
             });
         }
