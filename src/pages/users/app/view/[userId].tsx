@@ -1,5 +1,5 @@
-import { User } from "@prisma/client";
-import { DefaultProps, ReviewWithRestaurant } from "../../../../app/okra";
+import { Restaurant, Review, User } from "@prisma/client";
+import { DefaultProps } from "../../../../app/okra";
 import { DisplayUser } from "../../../../components/DisplayUser";
 import { Navbar } from "../../../../components/Navbar";
 import { ViewReview } from "../../../../components/ViewReview";
@@ -11,7 +11,9 @@ import styles from "../../../../styles/ViewUser.module.css";
 
 interface Props {
     user: User;
-    reviews: ReviewWithRestaurant[];
+    reviews: (Review & {
+        restaurant: Restaurant;
+    })[];
     me: User;
 }
 
@@ -28,9 +30,9 @@ export default function UserProfile(props: Props & DefaultProps) {
                     <DisplayUser disabled user={props.user} />
 
                     <h1>Recent reviews</h1>
-                    <div>
+                    <div className={styles.reviews}>
                         {props.reviews.map((it) => (
-                            <ViewReview data={it} />
+                            <ViewReview restaurant={it.restaurant} data={it} />
                         ))}
                     </div>
                 </div>
@@ -78,23 +80,22 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
     if (!otherUser) return { notFound: true };
 
-    const tempArr: ReviewWithRestaurant[] = [];
+    // const tempArr: ReviewWithRestaurant[] = [];
 
-    for (let i = 0; i < otherUser.reviews.length; i++) {
-        const { restaurant, ...rest } = otherUser.reviews[i];
+    // for (let i = 0; i < otherUser.reviews.length; i++) {
+    //     const { restaurant, ...rest } = otherUser.reviews[i];
 
-        tempArr.push({
-            ...rest,
-            restaurantLogo: restaurant.logo,
-            restaurantName: restaurant.name,
-        });
-    }
+    //     tempArr.push({
+    //         ...rest,
+    //         restaurant:
+    //     });
+    // }
 
     return {
         props: {
             me: fullUser,
             user: otherUser,
-            reviews: tempArr,
+            reviews: otherUser.reviews,
         },
     };
 };

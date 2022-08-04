@@ -1,20 +1,16 @@
 .main {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin-top: 5em;
 }
 
 .main > div {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
     min-width: 40vw;
-    max-width: 50vw;
+    max-width: 60vw;
 }
 
-.reviews {
+.main > div > div {
     display: flex;
     flex-direction: column;
     gap: 3em;
+    margin-top: 2em;
 }

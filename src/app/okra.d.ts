@@ -30,6 +30,10 @@ export type ReviewWithRestaurant = Review & {
     restaurantLogo: string;
 };
 
+export type ReviewWithUser = Review & {
+    user: User;
+};
+
 export type OrderWithUser = Order & { user: User } & {
     items: (OrderItem & {
         item: Item;

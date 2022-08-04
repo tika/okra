@@ -4,11 +4,12 @@ import styles from "../styles/Display.module.css";
 
 interface Props {
     restaurant: Restaurant;
+    dest?: string;
 }
 
 export function DisplayRestaurant(props: Props) {
     return (
-        <a className={styles.main} href="/restaurants/app/edit">
+        <a className={styles.main} href={props.dest ?? "/restaurants/app/edit"}>
             <div className={styles.image}>
                 <Image src={props.restaurant.logo} layout="fill" />
             </div>

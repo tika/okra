@@ -1,12 +1,17 @@
 import { Item, Restaurant, User } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { UserJWT } from "../../../../app/userjwt";
-import { CartItem, DefaultProps } from "../../../../app/okra";
+import { DefaultProps } from "../../../../app/okra";
 import { Navbar } from "../../../../components/Navbar";
 import { prisma } from "../../../../app/prisma";
 import { DisplayUser } from "../../../../components/DisplayUser";
 import styles from "../../../../styles/ViewRestaurant.module.css";
-import { isNumber, capitalise } from "../../../../app/primitive";
+import {
+    isNumber,
+    capitalise,
+    convertDate,
+    convertTime,
+} from "../../../../app/primitive";
 import {
     CurrencyPoundIcon,
     LocationMarkerIcon,
@@ -15,7 +20,7 @@ import {
     StarIcon,
 } from "@heroicons/react/outline";
 import { MenuItem } from "../../../../components/MenuItem";
-import { createRef, useEffect, useRef, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import { AddItemModal } from "../../../../components/AddItemModal";
 import { Cart } from "../../../../app/cart";
 import toast from "react-hot-toast";
@@ -122,8 +127,12 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                         <div>
                             <StarIcon />
                             <span>
-                                {props.starAverage} stars • {props.reviewCount}{" "}
-                                reviews
+                                {props.starAverage} stars •{" "}
+                                <a
+                                    href={`/users/app/${props.restaurant.id}/reviews`}
+                                >
+                                    {props.reviewCount} reviews
+                                </a>
                             </span>
                         </div>
                         <div>
@@ -135,7 +144,9 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                             <span>
                                 {props.lastOrderCompletedAt
                                     ? `Last order completed at
-                                ${props.lastOrderCompletedAt.toString()}`
+                                ${convertDate(
+                                    props.lastOrderCompletedAt
+                                )} • ${convertTime(props.lastOrderCompletedAt)}`
                                     : "No orders yet"}
                             </span>
                         </div>
