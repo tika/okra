@@ -27,6 +27,7 @@ import { AddItemModal } from "../../../../components/AddItemModal";
 import { Cart } from "../../../../app/cart";
 import toast from "react-hot-toast";
 import { calcDistance } from "../../../../app/maps";
+import useDebounce from "../../../../app/usedebounce";
 
 interface Props {
     user: User;
@@ -40,9 +41,13 @@ interface Props {
 
 export default function ViewRestaurant(props: Props & DefaultProps) {
     const [itemsShown, setItemsShown] = useState(props.menu);
-    const [categoriesShown, setCategoriesShown] = useState(getCategories());
+    const [categoriesShown, setCategoriesShown] = useState(
+        getCategories(props.menu)
+    );
     const [viewItem, setViewItem] = useState<Item | undefined>(); // TODO: better name
     const [cart, setCart] = useState<Cart>();
+    const [searchVal, setSearchVal] = useState<string>();
+    const debouncedSearch = useDebounce(searchVal);
 
     // This is silly, but because of a Hydration warning, we must first wait for the entire window to mount before using localstorage.
     useEffect(() => {
@@ -50,24 +55,35 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
     }, [props.restaurant.id]);
 
     // Gets categories from the items shown
-    function getCategories() {
+    function getCategories(newItemsShown: Item[]) {
         return Array.from(
-            new Set(itemsShown.map((it) => capitalise(it.category)))
+            new Set(newItemsShown.map((it) => capitalise(it.category)))
         );
     }
 
     // Matches name
-    function onSearch(val: string) {
-        if (val === "") return setItemsShown(props.menu);
+    useEffect(() => {
+        if (!debouncedSearch) {
+            setCategoriesShown(getCategories(props.menu));
+            return setItemsShown(props.menu);
+        }
 
-        setItemsShown(
-            props.menu.filter((it) =>
-                it.name.toLowerCase().includes(val.toLowerCase())
-            )
+        const val = debouncedSearch.trim().toLowerCase();
+
+        // empty
+        if (val.length === 0 || val === "") {
+            setCategoriesShown(getCategories(props.menu));
+            return setItemsShown(props.menu);
+        }
+
+        // set these items
+        const items = props.menu.filter((it) =>
+            it.name.toLowerCase().includes(val)
         );
 
-        setCategoriesShown(getCategories());
-    }
+        setItemsShown(items);
+        setCategoriesShown(getCategories(items));
+    }, [debouncedSearch]);
 
     function itemChange(amount: number) {
         // Something's gone wrong
@@ -168,7 +184,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                     <div className={styles.search}>
                         <SearchIcon height="100%" width="30px" />
                         <input
-                            onChange={(e) => onSearch(e.target.value)}
+                            onChange={(e) => setSearchVal(e.target.value)}
                             placeholder="Search items"
                         />
                     </div>
