@@ -65,6 +65,8 @@ export default function CartPage(props: Props & DefaultProps) {
             tempTotal += cartItems[i].quantity * menuItem.price;
         }
 
+        tempTotal += props.restaurant.deliveryFee;
+
         setItems(temp);
         setTotal(tempTotal);
     }, [props.menu, props.restaurant.id]);
@@ -120,6 +122,11 @@ export default function CartPage(props: Props & DefaultProps) {
                                 </span>
                             </div>
                         ))}
+
+                        <span>
+                            Delivery fee:{" "}
+                            {formatPrice(props.restaurant.deliveryFee)}
+                        </span>
 
                         {note === null ? (
                             <div

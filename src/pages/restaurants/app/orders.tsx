@@ -84,6 +84,7 @@ export default function Orders(props: Props & DefaultProps) {
                                     total={it.total}
                                     complete={() => complete(it.order)}
                                     cancel={() => cancel(it.order)}
+                                    deliveryFee={props.restaurant.deliveryFee}
                                 />
                             ))}
                     </div>
@@ -97,6 +98,7 @@ export default function Orders(props: Props & DefaultProps) {
                                     key={it.order.id}
                                     order={it.order}
                                     total={it.total}
+                                    deliveryFee={props.restaurant.deliveryFee}
                                 />
                             ))}
                     </div>

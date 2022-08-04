@@ -14,6 +14,7 @@ interface Props {
     order: OrderWithUser;
     total: number;
     displayComplete?: boolean;
+    deliveryFee: number;
 }
 
 export function ViewOrder(props: Props) {
@@ -31,7 +32,11 @@ export function ViewOrder(props: Props) {
                 <span>Note to restaurant: {props.order.note}</span>
             )}
 
-            <span>Order total: {formatPrice(props.total)}</span>
+            <span>Delivery fee: {formatPrice(props.deliveryFee)}</span>
+
+            <span>
+                Order total: {formatPrice(props.total + props.deliveryFee)}
+            </span>
 
             <div className={styles.user}>
                 <DisplayUser

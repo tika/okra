@@ -19,6 +19,7 @@ import {
     SearchIcon,
     ShoppingCartIcon,
     StarIcon,
+    TruckIcon,
 } from "@heroicons/react/outline";
 import { MenuItem } from "../../../../components/MenuItem";
 import { useEffect, useState } from "react";
@@ -148,6 +149,12 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                             <CurrencyPoundIcon />
                             <span>
                                 Min. order £{props.restaurant.minOrderAmount}
+                            </span>
+                        </div>
+                        <div>
+                            <TruckIcon />
+                            <span>
+                                Delivery fee £{props.restaurant.deliveryFee}
                             </span>
                         </div>
                     </div>
@@ -317,7 +324,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
                 a.category.localeCompare(b.category)
             ),
             reviewCount: restaurant.reviews.length,
-            starAverage: avg._avg.rating || 0,
+            starAverage: Math.round((avg._avg.rating ?? 0) * 10) / 10,
             lastOrderTook:
                 !lastOrder || !lastOrder.completedAt
                     ? -1

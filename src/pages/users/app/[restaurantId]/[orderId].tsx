@@ -17,6 +17,7 @@ interface Props {
     items: CheckoutCartItem[];
     itemCount: number;
     note: string;
+    total: number;
 }
 
 export default function FinishOrder(props: Props & DefaultProps) {
@@ -55,7 +56,8 @@ export default function FinishOrder(props: Props & DefaultProps) {
                     <div className={styles.items}>
                         {props.items.map((it) => (
                             <div key={it.id}>
-                                {it.quantity}x {it.name}
+                                {it.quantity}x {it.name} (
+                                {it.price * it.quantity})
                             </div>
                         ))}
                     </div>
@@ -64,6 +66,8 @@ export default function FinishOrder(props: Props & DefaultProps) {
                             Your note to the restaurant: {props.note}
                         </p>
                     )}
+                    <span>Delivery Fee: {props.restaurant.deliveryFee}</span>
+                    <span>Total: {props.total}</span>
                     <FeedbackForm onSubmit={submitFeedback} />
                 </div>
             </div>
@@ -115,6 +119,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
     if (!order) return { notFound: true };
 
+    let total = 0;
+
     // Let's map some items
     const tempItems: CheckoutCartItem[] = [];
 
@@ -124,11 +130,15 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
         if (!menuItem) continue;
 
+        total += item.quantity * menuItem.price;
+
         tempItems.push({
             ...menuItem,
             quantity: item.quantity,
         });
     }
+
+    total += restaurant.deliveryFee;
 
     return {
         props: {
@@ -138,6 +148,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
             items: tempItems,
             itemCount: order.items.length,
             note: order.note,
+            total,
         },
     };
 };

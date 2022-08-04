@@ -41,7 +41,7 @@ export default createEndpoint({
         }
 
         const charge = await stripe.charges.create({
-            amount: total * 100,
+            amount: total * 100 + restaurant.deliveryFee * 100,
             currency: "gbp",
             description: `Items: ${data.items
                 .map((it) => it.itemId)
@@ -95,6 +95,7 @@ export default createEndpoint({
                 )
                 .join("\n"),
             order.note ? "Note: " + order.note : "No note provided",
+            `Order total: ${formatPrice(restaurant.deliveryFee + total)}`,
             "",
             "Delivery address:",
             formatAddress({
@@ -124,6 +125,7 @@ export default createEndpoint({
                 )
                 .join("\n"),
             order.note ? "Note: " + order.note : "No note provided",
+            `Order total: ${formatPrice(restaurant.deliveryFee + total)}`,
             "",
             "Delivery address:",
             formatAddress({
@@ -138,14 +140,14 @@ export default createEndpoint({
         ]);
 
         console.log(
-            `${data.userId} made a purchase for ${formatPrice(total)}, id: ${
-                order.id
-            }`
+            `${data.userId} made a purchase for ${formatPrice(
+                total + restaurant.deliveryFee
+            )}, id: ${order.id}`
         );
 
         res.send({
             message: `Successfully made order for ${formatPrice(
-                total
+                restaurant.deliveryFee
             )}, reference ${order.id}`,
             id: order.id,
         });

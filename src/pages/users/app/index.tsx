@@ -83,7 +83,7 @@ export default function App(props: Props & DefaultProps) {
                                             width="2em"
                                         />
                                         <span>
-                                            {it.latestTime === -1
+                                            {it.latestTime === 0
                                                 ? "No orders yet"
                                                 : `Last order took
                                              ${millisToMins(it.latestTime)}`}
@@ -154,7 +154,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
     for (let i = 0; i < restaurants.length; i++) {
         const { orders, ...rest } = restaurants[i];
-        const completedAt = orders[0].completedAt?.getTime();
 
         const distance = await calcDistance(a, {
             line1: rest.address1,
@@ -170,11 +169,19 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
             };
         }
 
+        let time = 0;
+
+        if (orders.length !== 0) {
+            const completedAt = orders[0].completedAt?.getTime() ?? null;
+
+            time =
+                (completedAt && completedAt - orders[0].createdAt.getTime()) ??
+                -1;
+        }
+
         temp.push({
             ...rest,
-            latestTime:
-                (completedAt && completedAt - orders[0].createdAt.getTime()) ??
-                -1,
+            latestTime: time,
             distanceFromUser: distance,
         });
     }

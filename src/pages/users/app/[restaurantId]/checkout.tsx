@@ -39,6 +39,8 @@ export default function Checkout(props: DefaultProps & Props) {
             tempTotal += cartItems[i].quantity * menuItem.price;
         }
 
+        tempTotal += props.restaurant.deliveryFee;
+
         setCart(temp);
         setTotal(tempTotal);
     }, [props.menu, props.restaurant.id]);

@@ -56,6 +56,9 @@ export default function App(props: Props & DefaultProps) {
                                         order={it.order}
                                         total={it.total}
                                         key={it.order.id}
+                                        deliveryFee={
+                                            props.restaurant.deliveryFee
+                                        }
                                         displayComplete
                                     />
                                 ))}
@@ -67,6 +70,9 @@ export default function App(props: Props & DefaultProps) {
                                         order={it.order}
                                         total={it.total}
                                         key={it.order.id}
+                                        deliveryFee={
+                                            props.restaurant.deliveryFee
+                                        }
                                         displayComplete
                                     />
                                 ))}
