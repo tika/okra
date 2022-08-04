@@ -8,6 +8,7 @@ import { toastStyle } from "../app/constants";
 import { CartItem } from "../app/okra";
 import { formatPrice } from "../app/primitive";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface Props {
     restaurantId: number;
@@ -20,6 +21,8 @@ interface Props {
 export default function CheckoutForm(props: Props) {
     const stripe = useStripe();
     const elements = useElements();
+    const router = useRouter();
+
     const [disabled, setDisabled] = useState(true);
 
     useEffect(() => {
@@ -64,7 +67,10 @@ export default function CheckoutForm(props: Props) {
                 props.note,
                 props.userId,
                 props.items
-            ).then(() => setDisabled(false));
+            ).then((res: any) => {
+                setDisabled(false);
+                router.push(`/users/app/${props.restaurantId}/${res.id}`);
+            });
         }
     }
 

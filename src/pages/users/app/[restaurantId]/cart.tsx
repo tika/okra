@@ -3,7 +3,12 @@ import { useEffect, useState } from "react";
 import { Cart } from "../../../../app/cart";
 import { Navbar } from "../../../../components/Navbar";
 import { GetServerSideProps } from "next";
-import { formatPrice, isNumber } from "../../../../app/primitive";
+import {
+    convertDate,
+    convertTime,
+    formatPrice,
+    isNumber,
+} from "../../../../app/primitive";
 import { prisma } from "../../../../app/prisma";
 import { UserJWT } from "../../../../app/userjwt";
 import { Item, Restaurant, User } from "@prisma/client";
@@ -84,7 +89,9 @@ export default function CartPage(props: Props & DefaultProps) {
                                 <span>
                                     {props.lastOrderCompletedAt
                                         ? `Last order completed at
-                                ${props.lastOrderCompletedAt.toString()}`
+                                ${convertDate(
+                                    props.lastOrderCompletedAt
+                                )} • ${convertTime(props.lastOrderCompletedAt)}`
                                         : "No orders yet"}
                                 </span>
                             </div>

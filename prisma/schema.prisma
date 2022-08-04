@@ -74,7 +74,7 @@ model OrderItem {
   quantity Int // How many items
   item Item @relation(references: [id], fields: [itemId])
   itemId Int
-  order Order @relation(references: [id], fields: [orderId])
+  order Order @relation(references: [id], fields: [orderId], onDelete: Cascade)
   orderId String
 }
 

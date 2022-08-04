@@ -1,12 +1,16 @@
 import { Restaurant } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { RestaurantJWT } from "../../../app/restaurantjwt";
-import { BaseItem, DefaultProps, OrderWithUser } from "../../../app/okra";
+import { DefaultProps, OrderWithUser } from "../../../app/okra";
 import { Navbar } from "../../../components/Navbar";
 import { prisma } from "../../../app/prisma";
 import { DisplayRestaurant } from "../../../components/DisplayRestaurant";
 import styles from "../../../styles/Orders.module.css";
 import { ViewOrder } from "../../../components/ViewOrder";
+import { fetcher } from "../../../app/fetch";
+import { useRouter } from "next/router";
+import toast from "react-hot-toast";
+import { toastStyle } from "../../../app/constants";
 
 interface Props {
     restaurant: Restaurant;
@@ -17,9 +21,43 @@ interface Props {
 }
 
 export default function Orders(props: Props & DefaultProps) {
-    function complete(order: OrderWithUser) {}
+    const router = useRouter();
 
-    function cancel(order: OrderWithUser) {}
+    function complete(order: OrderWithUser) {
+        async function actions() {
+            await fetcher("POST", "/restaurants/orders", { orderId: order.id });
+            await router.push("/restaurants/app/orders");
+        }
+
+        toast.promise(
+            actions(),
+            {
+                loading: "Loading...",
+                success: <b>Completed order</b>,
+                error: (e) => e.message || <b>Something went wrong</b>,
+            },
+            { style: toastStyle }
+        );
+    }
+
+    function cancel(order: OrderWithUser) {
+        async function actions() {
+            await fetcher("DELETE", "/restaurants/orders", {
+                orderId: order.id,
+            });
+            await router.push("/restaurants/app/orders");
+        }
+
+        toast.promise(
+            actions(),
+            {
+                loading: "Loading...",
+                success: <b>Cancelled order</b>,
+                error: (e) => e.message || <b>Something went wrong</b>,
+            },
+            { style: toastStyle }
+        );
+    }
 
     return (
         <div className={props.main}>

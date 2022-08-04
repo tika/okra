@@ -6,6 +6,7 @@ import {
     formatPrice,
 } from "../app/primitive";
 import { DisplayUser } from "./DisplayUser";
+import styles from "../styles/ViewOrder.module.css";
 
 interface Props {
     complete?: () => void;
@@ -16,8 +17,8 @@ interface Props {
 
 export function ViewOrder(props: Props) {
     return (
-        <div>
-            <ul>
+        <div className={styles.main}>
+            <ul className={styles.items}>
                 {props.order.items.map((it) => (
                     <li>
                         {it.quantity}x {it.item.name}
@@ -25,16 +26,21 @@ export function ViewOrder(props: Props) {
                 ))}
             </ul>
 
+            {props.order.note && (
+                <span>Note to restaurant: {props.order.note}</span>
+            )}
+
             <span className="highlight">
                 Order total: {formatPrice(props.total)}
             </span>
 
-            <div>
+            <div className={styles.user}>
                 <DisplayUser
                     user={props.order.user}
                     text={`${props.order.user.name} • ${convertDate(
                         props.order.createdAt
                     )} • ${convertTime(props.order.createdAt)}`}
+                    dest={`/users/app/view/${props.order.user.id}`}
                 />
                 <a
                     href={`mailto:${props.order.user.email}`}
@@ -44,7 +50,8 @@ export function ViewOrder(props: Props) {
                 </a>
             </div>
 
-            <span>
+            <span className={styles.address}>
+                Delivery address:{" "}
                 {formatAddress({
                     line1: props.order.user.address1,
                     line2: props.order.user.address2,
@@ -54,9 +61,11 @@ export function ViewOrder(props: Props) {
             </span>
 
             {props.complete && props.cancel && (
-                <div>
+                <div className={styles.buttons}>
                     <button onClick={props.complete}>Complete</button>
-                    <span onClick={props.cancel}>Cancel</span>
+                    <span className="danger-text" onClick={props.cancel}>
+                        Cancel
+                    </span>
                 </div>
             )}
         </div>

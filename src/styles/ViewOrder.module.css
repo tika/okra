@@ -1,0 +1,38 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--coal);
+    border-radius: 0.2em;
+    padding: 1em 2em;
+}
+
+.main > ul > li {
+    list-style: none;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin: 1em 0;
+}
+
+.address {
+    font-weight: var(--medium);
+    margin-bottom: 1em;
+}
+
+.buttons {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttons > span {
+    cursor: pointer;
+}
+
+.items {
+    margin-bottom: 1em;
+}

@@ -18,12 +18,18 @@ export function formatPrice(price: number) {
     return formatter.format(price);
 }
 
+function padZero(a: number): string {
+    return a.toString().length < 2 ? `0${a}` : a.toString();
+}
+
 export function convertDate(date: Date) {
-    return `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
+    return `${padZero(date.getDay())}/${padZero(date.getMonth())}/${padZero(
+        date.getFullYear()
+    )}`;
 }
 
 export function convertTime(date: Date) {
-    return `${date.getHours()}:${date.getMinutes()}`;
+    return `${padZero(date.getHours())}:${padZero(date.getMinutes())}`;
 }
 
 export function formatAddress(address: {

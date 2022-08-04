@@ -6,6 +6,7 @@ interface Props {
     user: User;
     disabled?: boolean;
     text?: string;
+    dest?: string;
 }
 
 export function DisplayUser(props: Props) {
@@ -31,7 +32,10 @@ export function DisplayUser(props: Props) {
             {props.disabled ? (
                 <div className={styles.main}>{inner}</div>
             ) : (
-                <a className={styles.main} href={"/users/app/edit"}>
+                <a
+                    className={styles.main}
+                    href={props.dest ?? "/users/app/edit"}
+                >
                     {inner}
                 </a>
             )}

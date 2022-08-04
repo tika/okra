@@ -6,5 +6,15 @@
 }
 
 .main > div {
-    width: 50vw;
+    min-width: 40vw;
+    max-width: 60vw;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.main > div > div {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 }
