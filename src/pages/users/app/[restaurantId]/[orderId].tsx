@@ -1,7 +1,7 @@
 import { DefaultProps, CheckoutCartItem, Feedback } from "../../../../app/okra";
 import { Navbar } from "../../../../components/Navbar";
 import { GetServerSideProps } from "next";
-import { isNumber } from "../../../../app/primitive";
+import { formatPrice, isNumber } from "../../../../app/primitive";
 import { prisma } from "../../../../app/prisma";
 import { UserJWT } from "../../../../app/userjwt";
 import { Restaurant, User } from "@prisma/client";
@@ -57,7 +57,7 @@ export default function FinishOrder(props: Props & DefaultProps) {
                         {props.items.map((it) => (
                             <div key={it.id}>
                                 {it.quantity}x {it.name} (
-                                {it.price * it.quantity})
+                                {formatPrice(it.price * it.quantity)})
                             </div>
                         ))}
                     </div>
@@ -66,9 +66,17 @@ export default function FinishOrder(props: Props & DefaultProps) {
                             Your note to the restaurant: {props.note}
                         </p>
                     )}
-                    <span>Delivery Fee: {props.restaurant.deliveryFee}</span>
-                    <span>Total: {props.total}</span>
-                    <FeedbackForm onSubmit={submitFeedback} />
+                    <span>
+                        Delivery Fee:{" "}
+                        {formatPrice(props.restaurant.deliveryFee)}
+                    </span>
+                    <br />
+                    <span className={styles.total}>
+                        Total: {formatPrice(props.total)}
+                    </span>
+                    <div className={styles.form}>
+                        <FeedbackForm onSubmit={submitFeedback} />
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,7 +1,6 @@
 import { Item, Restaurant, User } from "@prisma/client";
 import { Elements } from "@stripe/react-stripe-js";
 import { DefaultProps } from "../../../../app/okra";
-import { stripePromise } from "../../../../app/stripe";
 import CheckoutForm from "../../../../components/CheckoutForm";
 import { DisplayUser } from "../../../../components/DisplayUser";
 import { Navbar } from "../../../../components/Navbar";
@@ -12,6 +11,7 @@ import { isNumber } from "../../../../app/primitive";
 import { Cart } from "../../../../app/cart";
 import { useEffect, useState } from "react";
 import styles from "../../../../styles/Checkout.module.css";
+import { loadStripe, Stripe } from "@stripe/stripe-js";
 
 interface Props {
     user: User;
@@ -23,6 +23,7 @@ interface Props {
 export default function Checkout(props: DefaultProps & Props) {
     const [cart, setCart] = useState<Cart>();
     const [total, setTotal] = useState(0);
+    const [stripe, setStripe] = useState<Stripe | null>(null);
 
     useEffect(() => {
         const temp = new Cart(props.restaurant.id);
@@ -43,6 +44,10 @@ export default function Checkout(props: DefaultProps & Props) {
 
         setCart(temp);
         setTotal(tempTotal);
+
+        loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as string).then(
+            (it) => setStripe(it)
+        );
     }, [props.menu, props.restaurant.id]);
 
     return (
@@ -61,7 +66,7 @@ export default function Checkout(props: DefaultProps & Props) {
                         now.
                     </h2>
                     {cart && (
-                        <Elements stripe={stripePromise}>
+                        <Elements stripe={stripe}>
                             <CheckoutForm
                                 note={props.note}
                                 userId={props.user.id}

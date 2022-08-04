@@ -25,3 +25,11 @@
     margin-bottom: 5em;
     font-weight: var(--bold);
 }
+
+.total {
+    font-weight: var(--bold);
+}
+
+.form {
+    margin-top: 5em;
+}

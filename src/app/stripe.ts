@@ -1,4 +1,3 @@
-import { User } from "@prisma/client";
 import { Token, loadStripe } from "@stripe/stripe-js";
 import { fetcher } from "./fetch";
 import { CartItem } from "./okra";
@@ -20,7 +19,3 @@ export async function stripeTokenHandler(
 
     return response;
 }
-
-export const stripePromise = loadStripe(
-    process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as string
-);

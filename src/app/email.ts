@@ -10,7 +10,6 @@ export async function sendEmail(
         user: process.env.EMAIL_USER,
         password: process.env.EMAIL_PASSWORD,
         ssl: true,
-        port: 465,
     });
 
     client.sendAsync({
