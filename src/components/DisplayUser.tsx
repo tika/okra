@@ -5,6 +5,7 @@ import styles from "../styles/Display.module.css";
 interface Props {
     user: User;
     disabled?: boolean;
+    text?: string;
 }
 
 export function DisplayUser(props: Props) {
@@ -21,7 +22,7 @@ export function DisplayUser(props: Props) {
                     "var(--dark-purple)",
                 ]}
             />
-            <span>{props.user.name}</span>
+            <span>{props.text ?? props.user.name}</span>
         </>
     );
 

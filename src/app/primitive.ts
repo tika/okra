@@ -21,3 +21,18 @@ export function formatPrice(price: number) {
 export function convertDate(date: Date) {
     return `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
 }
+
+export function convertTime(date: Date) {
+    return `${date.getHours()}:${date.getMinutes()}`;
+}
+
+export function formatAddress(address: {
+    line1: string;
+    line2: string | null;
+    city: string;
+    postcode: string;
+}) {
+    return `${address.line1}, ${address.line2 && address.line2 + ", "}${
+        address.city
+    }, ${address.postcode}`;
+}

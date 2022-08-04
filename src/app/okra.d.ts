@@ -1,4 +1,5 @@
-import { Item, Review } from "@prisma/client";
+import { Item, Order, OrderItem, Review, User } from "@prisma/client";
+import { AbstractUser } from "./abstractedtypes";
 
 export interface SVGProps {
     height: string | number;
@@ -27,4 +28,10 @@ export type Feedback = {
 export type ReviewWithRestaurant = Review & {
     restaurantName: string;
     restaurantLogo: string;
+};
+
+export type OrderWithUser = Order & { user: User } & {
+    items: (OrderItem & {
+        item: Item;
+    })[];
 };
