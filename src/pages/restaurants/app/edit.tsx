@@ -31,6 +31,8 @@ export default function Edit({ restaurant, main }: Props & DefaultProps) {
     const [address2, setAddress2] = useState("");
     const [city, setCity] = useState("");
     const [postcode, setPostcode] = useState("");
+    const [stripePublicKey, setStripePublicKey] = useState("");
+    const [stripeSecretKey, setStripeSecretKey] = useState("");
 
     const router = useRouter();
 
@@ -176,6 +178,21 @@ export default function Edit({ restaurant, main }: Props & DefaultProps) {
                                 placeholder="Sheeesh, kebab"
                                 value={description}
                                 onInput={(val) => setDescription(val)}
+                                type="text"
+                            />
+                            <h2 style={{ marginTop: "1em" }}>Payments</h2>
+                            <FormInput
+                                title="Stripe Public Key"
+                                placeholder="pk_xxxx_xxxx"
+                                value={stripePublicKey}
+                                onInput={(val) => setStripePublicKey(val)}
+                                type="text"
+                            />
+                            <FormInput
+                                title="Stripe Secret Key"
+                                placeholder="sk_xxxx_xxxx"
+                                value={stripeSecretKey}
+                                onInput={(val) => setStripeSecretKey(val)}
                                 type="text"
                             />
                             <h2 style={{ marginTop: "1em" }}>

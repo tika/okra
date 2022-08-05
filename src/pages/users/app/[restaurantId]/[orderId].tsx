@@ -22,18 +22,19 @@ interface Props {
 
 export default function FinishOrder(props: Props & DefaultProps) {
     function submitFeedback(val: Feedback) {
-        toast.promise(
-            fetcher("POST", `/restaurants/reviews`, {
+        async function actions() {
+            await fetcher("POST", `/restaurants/reviews`, {
                 description: val.text,
                 rating: val.starCount,
                 restaurantId: props.restaurant.id,
-            }),
-            {
-                loading: "Submitting feedback",
-                success: "Sent your feedback!",
-                error: (e) => e.message || "Something went wrong!",
-            }
-        );
+            });
+        }
+
+        toast.promise(actions(), {
+            loading: "Submitting feedback",
+            success: "Sent your feedback!",
+            error: (e) => e.message || "Something went wrong!",
+        });
     }
 
     return (

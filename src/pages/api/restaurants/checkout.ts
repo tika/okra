@@ -41,7 +41,7 @@ export default createEndpoint({
         }
 
         const charge = await stripe.charges.create({
-            amount: total * 100 + restaurant.deliveryFee * 100,
+            amount: Math.round(total * 100 + restaurant.deliveryFee * 100), // must be an int
             currency: "gbp",
             description: `Items: ${data.items
                 .map((it) => it.itemId)

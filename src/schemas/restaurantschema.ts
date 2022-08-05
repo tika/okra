@@ -39,6 +39,8 @@ export const updateSchema = z.object({
     city: z.string().optional(),
     postcode: z.string().optional(),
     newPassword: password.optional(),
+    stripeSecretKey: z.string(),
+    stripePublicKey: z.string(),
 });
 
 export const deleteSchema = z.object({
