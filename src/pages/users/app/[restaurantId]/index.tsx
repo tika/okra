@@ -154,7 +154,7 @@ export default function ViewRestaurant(props: Props & DefaultProps) {
                         <div>
                             <ShoppingCartIcon />
                             <span>
-                                {props.lastOrderTook === -1
+                                {props.lastOrderTook === 0
                                     ? "No orders yet"
                                     : `Last order took ${millisToMins(
                                           props.lastOrderTook
@@ -304,11 +304,16 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     // Well, we sort all of the orders in desc order, and get the first one
     const lastOrder = await prisma.order.findFirst({
         orderBy: {
-            completedAt: "desc",
+            completedAt: "asc",
         },
         select: {
             completedAt: true,
             createdAt: true,
+        },
+        where: {
+            createdAt: {
+                not: undefined,
+            },
         },
         take: 1,
     });
