@@ -6,7 +6,7 @@ Okra, much like UberEats, is an alternative to order food from a restaurant. Typ
 
 ## Preview
 
-[Video presentation found here](https://www.youtube.com/embed/EbZF9h7GTdA)
+[Short video presentation found here](https://www.youtube.com/watch?v=kAGkPxa9AS8)
 
 I recommend checking out this website [here](https://okra.tika.is/). It is hosted by [Vercel](https://vercel.com/), with an [additional service](https://railway.app/) to host the PostgreSQL database. Unfortunately, this does mean that access speeds to the database can be slow as it is located in an external location, however, it will still work as intended (after a while)
 
