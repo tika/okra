@@ -225,9 +225,15 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     // When was the last order completed at?
     // Well, we sort all of the orders in desc order, and get the first one
     const lastOrder = await prisma.order.findFirst({
+        where: {
+            completedAt: {
+                not: null,
+            },
+        },
         orderBy: {
             completedAt: "desc",
         },
+        take: 1,
     });
 
     // distance from user
