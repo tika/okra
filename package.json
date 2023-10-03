@@ -23,7 +23,7 @@
         "dayjs": "^1.11.4",
         "emailjs": "^4.0.0",
         "jsonwebtoken": "^8.5.1",
-        "next": "12.2.3",
+        "next": "13.5.4",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-hot-toast": "^2.3.0",
