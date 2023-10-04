@@ -30,7 +30,7 @@
         "stripe": "^9.16.0",
         "superjson": "^1.9.1",
         "ts-localstorage": "^2.0.0",
-        "zod": "^3.17.10"
+        "zod": "^3.22.3"
     },
     "devDependencies": {
         "@types/cookie": "^0.5.1",
